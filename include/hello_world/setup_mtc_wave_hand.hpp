@@ -51,12 +51,6 @@ public:
      * to an MTC task object. This function returns a BT::PortsList that declares this single port.
      */
     static BT::PortsList providedPorts();
-
-    /**
-     * @brief Async thread for SetupMTCWaveHand. Adds MTC stages to an MTC task provided on a data port.
-     * @details 
-     * @return Returns 
-     */
     
 private:
     /**

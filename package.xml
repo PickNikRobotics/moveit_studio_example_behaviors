@@ -4,10 +4,11 @@
   <version>0.0.0</version>
   <description>Log a message that says "Hello, world!".</description>
 
-  <maintainer email="john@doe.com">John Doe</maintainer>
-  <author email="john@doe.com">John Doe</author>
+  <maintainer email="studio.maintainers@picknik.ai">MoveIt Studio Maintainer</maintainer>
 
-  <license>TODO</license>
+  <author email="studio.maintainers@picknik.ai">MoveIt Studio Maintainer</author>
+
+  <license>BSD-3-Clause</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

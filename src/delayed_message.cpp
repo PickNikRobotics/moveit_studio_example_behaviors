@@ -11,7 +11,7 @@ DelayedMessage::DelayedMessage(
 
 BT::PortsList DelayedMessage::providedPorts()
 {
-  // delay_duration: Number of seconds to wait before saying hello
+  // delay_duration: Number of seconds to wait before logging a message
   return BT::PortsList({
     BT::InputPort<double>("delay_duration")
   });
@@ -28,7 +28,8 @@ BT::NodeStatus DelayedMessage::onStart()
   // The maybe_error function returns a std::optional with an error message if the port was set incorrectly
   if (const auto error = moveit_studio::behaviors::maybe_error(maybe_duration); error)
   {
-    RCLCPP_ERROR_STREAM(rclcpp::get_logger("DelayedMessage"), "Failed to read input data port:\n" << error.value());
+    // If the port was set incorrectly, we will log an error message to the UI and the node will return FAILURE
+    shared_resources_->failure_logger->publishFailureMessage(name(),MoveItStudioErrorCode{ moveit_msgs::msg::MoveItErrorCodes::FAILURE, "Failed to get required values from input data ports." }, error.value());
     return BT::NodeStatus::FAILURE;
   }
 

@@ -19,6 +19,11 @@
         </Action>
         <Action ID="SetupMTCWaveHand">
             <metadata subcategory="MTC"/>
+            <description>
+                <p>
+                    Wave hello with the end-effector
+                </p>
+            </description>
             <inout_port name="task" default="{mtc_task}">MoveIt Task Constructor task.</inout_port>
         </Action>
     </TreeNodesModel>

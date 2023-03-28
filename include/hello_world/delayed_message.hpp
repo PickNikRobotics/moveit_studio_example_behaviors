@@ -34,7 +34,7 @@ public:
    * @brief Implementation of the required providedPorts() function for the delayed_message Behavior.
    * @details The BehaviorTree.CPP library requires that Behaviors must implement a static function named providedPorts() which defines their input and output ports. If the Behavior does not use any ports, this function must return an empty BT::PortsList.
    * This function returns a list of ports with their names and port info, which is used internally by the behavior tree.
-   * @return delayed_message does not use expose any ports, so this function returns an empty list.
+   * @return If delayed_message does not expose any ports, this function returns an empty list.
    */
   static BT::PortsList providedPorts();
 
@@ -47,7 +47,7 @@ public:
 
   /**
    * @brief Implementation of onRunning(). Checks the status of the Behavior when it is ticked after it starts running.
-   * @return TODO(...)
+   * @return BT::NodeStatus::RUNNING, BT::NodeStatus::SUCCESS, or BT::NodeStatus::FAILURE depending on the Behavior status.
    */
   BT::NodeStatus onRunning() override;
 
