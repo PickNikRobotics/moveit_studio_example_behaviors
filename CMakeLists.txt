@@ -17,6 +17,7 @@ set(
 add_library(
   hello_world SHARED
   src/hello_world.cpp
+  src/delayed_message.cpp
   src/setup_mtc_wave_hand.cpp
   src/register_behaviors.cpp
 )

@@ -7,6 +7,16 @@
                 </p>
             </description>
         </Action>
+        <Action ID="DelayedMessage">
+            <description>
+                <p>
+                    After some time, log a message that says "Hello, world!".
+                </p>
+            </description>
+            <input_port name="delay_duration" default="5">
+                The duration, in seconds, to wait before logging a message
+            </input_port>
+        </Action>
         <Action ID="SetupMTCWaveHand">
             <metadata subcategory="MTC"/>
             <inout_port name="task" default="{mtc_task}">MoveIt Task Constructor task.</inout_port>
