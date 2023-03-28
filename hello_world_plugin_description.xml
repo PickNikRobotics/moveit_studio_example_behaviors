@@ -1,0 +1,5 @@
+<library path="hello_world">
+  <class type="hello_world::HelloWorldBehaviorsLoader"
+         base_class_type="moveit_studio::behaviors::SharedResourcesNodeLoaderBase">
+  </class>
+</library>

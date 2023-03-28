@@ -1,0 +1,15 @@
+<root>
+    <TreeNodesModel>
+        <Action ID="HelloWorld">
+            <description>
+                <p>
+                    Log a message that says "Hello, world!".
+                </p>
+            </description>
+        </Action>
+        <Action ID="SetupMTCWaveHand">
+            <metadata subcategory="MTC"/>
+            <inout_port name="task" default="{mtc_task}">MoveIt Task Constructor task.</inout_port>
+        </Action>
+    </TreeNodesModel>
+</root>
