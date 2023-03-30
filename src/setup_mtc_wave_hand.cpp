@@ -1,4 +1,4 @@
-#include <hello_world/setup_mtc_wave_hand.hpp>
+#include <example_behaviors/setup_mtc_wave_hand.hpp>
 
 #include <moveit/task_constructor/solvers.h>
 #include <moveit/task_constructor/stages.h>
@@ -18,7 +18,7 @@ constexpr auto kHandFrameName = "manual_grasp_link";
 const rclcpp::Logger kLogger = rclcpp::get_logger("WaveHello");
 }
 
-namespace hello_world
+namespace example_behaviors
 {
 SetupMTCWaveHand::SetupMTCWaveHand(
     const std::string& name, const BT::NodeConfiguration& config,
@@ -103,4 +103,4 @@ fp::Result<bool> SetupMTCWaveHand::doWork()
   return true;
 }
 
-}  // namespace hello_world
+}  // namespace example_behaviors

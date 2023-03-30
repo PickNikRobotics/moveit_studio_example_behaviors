@@ -2,15 +2,15 @@
 #include <moveit_studio_behavior_interface/behavior_context.hpp>
 #include <moveit_studio_behavior_interface/shared_resources_node_loader.hpp>
 
-#include <hello_world/hello_world.hpp>
-#include <hello_world/delayed_message.hpp>
-#include <hello_world/setup_mtc_wave_hand.hpp>
+#include <example_behaviors/hello_world.hpp>
+#include <example_behaviors/delayed_message.hpp>
+#include <example_behaviors/setup_mtc_wave_hand.hpp>
 
 #include <pluginlib/class_list_macros.hpp>
 
-namespace hello_world
+namespace example_behaviors
 {
-class HelloWorldBehaviorsLoader : public moveit_studio::behaviors::SharedResourcesNodeLoaderBase
+class ExampleBehaviorsLoader : public moveit_studio::behaviors::SharedResourcesNodeLoaderBase
 {
 public:
   void registerBehaviors(BT::BehaviorTreeFactory& factory,
@@ -22,7 +22,7 @@ public:
 
   }
 };
-}  // namespace hello_world
+}  // namespace example_behaviors
 
-PLUGINLIB_EXPORT_CLASS(hello_world::HelloWorldBehaviorsLoader,
+PLUGINLIB_EXPORT_CLASS(example_behaviors::ExampleBehaviorsLoader,
                        moveit_studio::behaviors::SharedResourcesNodeLoaderBase);

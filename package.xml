@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>hello_world</name>
+  <name>example_behaviors</name>
   <version>0.0.0</version>
-  <description>Log a message that says "Hello, world!".</description>
+  <description>A collection of example behaviors for use in MoveIt Studio.</description>
 
   <maintainer email="studio.maintainers@picknik.ai">MoveIt Studio Maintainer</maintainer>
 

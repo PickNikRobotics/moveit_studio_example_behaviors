@@ -1,6 +1,6 @@
-#include <hello_world/delayed_message.hpp>
+#include <example_behaviors/delayed_message.hpp>
 
-namespace hello_world
+namespace example_behaviors
 {
 DelayedMessage::DelayedMessage(
     const std::string& name, const BT::NodeConfiguration& config,
@@ -70,4 +70,4 @@ void DelayedMessage::onHalted()
 {
 }
 
-}  // namespace hello_world
+}  // namespace example_behaviors

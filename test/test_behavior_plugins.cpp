@@ -19,7 +19,7 @@ TEST(BehaviorTests, test_load_behavior_plugins)
 
   BT::BehaviorTreeFactory factory;
   {
-    auto plugin_instance = class_loader.createUniqueInstance("hello_world::HelloWorldBehaviorsLoader");
+    auto plugin_instance = class_loader.createUniqueInstance("example_behaviors::ExampleBehaviorsLoader");
     ASSERT_NO_THROW(plugin_instance->registerBehaviors(factory, shared_resources));
   }
   // Test that ClassLoader is able to find and instantiate each behavior using the package's plugin description info.

@@ -8,7 +8,7 @@
 #include <moveit_studio_behavior_interface/check_for_error.hpp>
 #include <moveit_studio_behavior_interface/async_behavior_base.hpp>
 
-namespace hello_world
+namespace example_behaviors
 {
 /**
 * @brief The SetupMTCWaveHand behavior makes any robot move the end of its arm back and forth.
@@ -73,4 +73,4 @@ private:
     /** @brief Classes derived from AsyncBehaviorBase must have this shared_future as a class member */
     std::shared_future<fp::Result<bool>> future_;
 };
-}  // namespace hello_world
+}  // namespace example_behaviors

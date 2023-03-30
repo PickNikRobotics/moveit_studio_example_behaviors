@@ -6,7 +6,7 @@
 #include <moveit_studio_behavior_interface/shared_resources_node.hpp>
 
 
-namespace hello_world
+namespace example_behaviors
 {
 /**
  * @brief TODO(...)
@@ -41,4 +41,4 @@ public:
   BT::NodeStatus tick() override;
   
 };
-}  // namespace hello_world
+}  // namespace example_behaviors

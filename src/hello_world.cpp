@@ -1,6 +1,6 @@
-#include <hello_world/hello_world.hpp>
+#include <example_behaviors/hello_world.hpp>
 
-namespace hello_world
+namespace example_behaviors
 {
 HelloWorld::HelloWorld(
     const std::string& name, const BT::NodeConfiguration& config,
@@ -28,4 +28,4 @@ BT::NodeStatus HelloWorld::tick()
   return BT::NodeStatus::FAILURE;
 }
 
-}  // namespace hello_world
+}  // namespace example_behaviors

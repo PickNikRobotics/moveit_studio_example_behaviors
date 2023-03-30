@@ -10,7 +10,7 @@
 #include <moveit_studio_behavior_interface/check_for_error.hpp>
 
 
-namespace hello_world
+namespace example_behaviors
 {
 /**
  * @brief TODO(...)
@@ -54,4 +54,4 @@ public:
   void onHalted() override;
   
 };
-}  // namespace hello_world
+}  // namespace example_behaviors
