@@ -7,13 +7,6 @@
                 </p>
             </description>
         </Action>
-        <Action ID="MIKE">
-            <description>
-                <p>
-                    Log a message that says "Hello, world!".
-                </p>
-            </description>
-        </Action>
         <Action ID="DelayedMessage">
             <description>
                 <p>
