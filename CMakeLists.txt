@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16.3)
 project(example_behaviors)
 
 # Set MoveIt's typical CMake settings, including C++ standard version
+find_package(cv_bridge REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(moveit_common REQUIRED)
 moveit_package()
 
@@ -12,6 +14,7 @@ set(
   THIS_PACKAGE_INCLUDE_DEPENDS
   moveit_studio_behavior_interface
   pluginlib
+  cv_bridge
 )
 
 add_library(
@@ -19,12 +22,16 @@ add_library(
   src/hello_world.cpp
   src/delayed_message.cpp
   src/setup_mtc_wave_hand.cpp
+  src/save_image_to_file.cpp
+  src/image_to_blackboard.cpp
+  src/blackboard_image_to_file.cpp
   src/register_behaviors.cpp
 )
 target_include_directories(
   example_behaviors
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PUBLIC $<INSTALL_INTERFACE:include>
+  ${OpenCV_INCLUDE_DIRS}
 )
 ament_target_dependencies(example_behaviors ${THIS_PACKAGE_INCLUDE_DEPENDS})
 

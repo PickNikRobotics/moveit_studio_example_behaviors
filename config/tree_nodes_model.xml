@@ -26,5 +26,36 @@
             </description>
             <inout_port name="task" default="{mtc_task}">MoveIt Task Constructor task.</inout_port>
         </Action>
+        <Action ID="SaveImageToFile">
+            <metadata subcategory="Perception"/>
+            <description>
+                <p>
+                    Saves a single image to a file as soon as it receives a message on the topic. Filename will follow the syntax of IMAGE_TOPIC_image_raw_YYYYMMDD_HHMMSS.png
+                </p>
+            </description>
+            <input_port name="image_topic" default="/scene_camera/color/image_raw">The topic this behaviour subscribes to.</input_port>
+            <input_port name="file_path" default="/opt/moveit_studio/user_ws">The full path to save the image in.</input_port>
+        </Action>
+        <Action ID="ImageToBlackboard">
+            <metadata subcategory="Perception"/>
+            <description>
+                <p>
+                    Put an image topic on the blackboard.
+                </p>
+            </description>
+            <input_port name="input_topic" default="/scene_camera/color/image_raw">The topic this behaviour subscribes to.</input_port>
+            <output_port name="output_port" default="{image}">The blackboard port to use.</output_port>
+        </Action>
+        <Action ID="BlackboardImageToFile">
+            <metadata subcategory="Perception"/>
+            <description>
+                <p>
+                    Save the contents of a image on the blackboard to a file.
+                </p>
+            </description>
+            <input_port name="input_image" default="{image}">This port expects a sensor_msgs::Image</input_port>
+            <input_port name="file_path" default="/opt/moveit_studio/user_ws">The full path to save the image in.</input_port>
+            <input_port name="file_name" default="image_raw">The base of the image name to save before adding a timestamp.</input_port>
+        </Action>
     </TreeNodesModel>
 </root>
