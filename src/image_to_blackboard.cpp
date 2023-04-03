@@ -34,29 +34,41 @@ fp::Result<bool> ImageToBlackboard::doWork()
     return tl::make_unexpected(fp::Internal("Missing input port: " + error.value()));
   }
 
-// Create our image topic subscriber
   auto options = rclcpp::SubscriptionOptions();
   image_subscriber_ = shared_resources_->node->create_subscription<sensor_msgs::msg::Image>(
       image_topic.value(), rclcpp::SensorDataQoS(),
-      [this](const sensor_msgs::msg::Image::SharedPtr msg) { subscriberCallback(msg); }, options);
+      [this](const sensor_msgs::msg::Image::SharedPtr msg) {}, options);
 
+  rclcpp::WaitSet wait_set_;
   // Wait until the callback has completed
-  std::unique_lock<std::mutex> lock(mutex_);
-  // while (!callback_success_)
-  // {
-    condition_var_.wait(lock);
-  // }
-  // Kill the subscriber
-  image_subscriber_.reset();
+  wait_set_.add_subscription(image_subscriber_);
 
-  // Return SUCCESS if the callback SUCCEEDED
-  return (true);
+  // Wait for the subscriber event to trigger. Set a 1000 ms margin to trigger a timeout.
+  const auto wait_result = wait_set_.wait(std::chrono::milliseconds(1000));
+  switch (wait_result.kind())
+  {
+    case rclcpp::WaitResultKind::Ready:
+    {
+      sensor_msgs::msg::Image msg;
+      rclcpp::MessageInfo msg_info;
+      if (image_subscriber_->take(msg, msg_info))
+      {  
+        // Write to blackboard
+        setOutput(kPortIDOutputName, std::make_shared<sensor_msgs::msg::Image>(msg));
+        return true;
+      }
+      else
+      {
+        RCLCPP_ERROR(rclcpp::get_logger(name()), "Error. Failed to get message.");
+        return false;
+      }
+    }
+    case rclcpp::WaitResultKind::Timeout:
+      RCLCPP_WARN(rclcpp::get_logger(name()), "Timeout. No message received after given wait-time");
+      return false;
+    default:
+      RCLCPP_ERROR(rclcpp::get_logger(name()), "Error. Wait-set failed.");
+      return false;
+  }
 }
-
-void ImageToBlackboard::subscriberCallback(const sensor_msgs::msg::Image::SharedPtr msg)
-{
-  // Write to blackboard
-  setOutput(kPortIDOutputName, msg);
-  condition_var_.notify_all();
 }
-}  // namespace image_behaviors
