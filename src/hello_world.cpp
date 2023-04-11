@@ -12,7 +12,7 @@ HelloWorld::HelloWorld(
 
 BT::PortsList HelloWorld::providedPorts()
 {
-  // TODO(...)
+  // This node has no input or output ports
   return BT::PortsList({});
 }
 
@@ -25,7 +25,7 @@ BT::NodeStatus HelloWorld::tick()
 
   // Nodes that return FAILURE will have their error messages displayed in the UI.
   // If this node returns SUCCESS, the failure message will only be printed in the logs
-  return BT::NodeStatus::FAILURE;
+  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace example_behaviors

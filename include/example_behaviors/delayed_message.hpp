@@ -13,7 +13,7 @@
 namespace example_behaviors
 {
 /**
- * @brief TODO(...)
+ * @brief DelayedMessage will use FailureLoggerROS to log a "Hello World" message after the duration specified on the input port
  */
 class DelayedMessage : public moveit_studio::behaviors::SharedResourcesNode<BT::StatefulActionNode>
 {

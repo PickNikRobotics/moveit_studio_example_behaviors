@@ -9,7 +9,7 @@
 namespace example_behaviors
 {
 /**
- * @brief TODO(...)
+ * @brief The HelloWorld Behavior uses FailureLoggerROS to log a "Hello World" message and will always return SUCCESS
  */
 class HelloWorld : public moveit_studio::behaviors::SharedResourcesNode<BT::SyncActionNode>
 {
