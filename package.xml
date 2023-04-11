@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>example_behaviors</name>
+  <version>0.0.0</version>
+  <description>A collection of example behaviors for use in MoveIt Studio.</description>
+
+  <maintainer email="studio.maintainers@picknik.ai">MoveIt Studio Maintainer</maintainer>
+
+  <author email="studio.maintainers@picknik.ai">MoveIt Studio Maintainer</author>
+
+  <license>BSD-3-Clause</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>moveit_common</build_depend>
+
+  <depend>moveit_studio_behavior_interface</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_clang_format</test_depend>
+  <test_depend>ament_clang_tidy</test_depend>
+  <test_depend>ament_cmake_lint_cmake</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
