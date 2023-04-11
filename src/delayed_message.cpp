@@ -23,7 +23,7 @@ BT::NodeStatus DelayedMessage::onStart()
   start_time_ = std::chrono::steady_clock::now();
 
   // getInput returns a BT::Optional so we'll store the result temporarily while we check if it was set correctly
-  const auto maybe_duration = getInput<int>("delay_duration");
+  const auto maybe_duration = getInput<double>("delay_duration");
 
   // The maybe_error function returns a std::optional with an error message if the port was set incorrectly
   if (const auto error = moveit_studio::behaviors::maybe_error(maybe_duration); error)
