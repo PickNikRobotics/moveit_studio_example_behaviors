@@ -124,7 +124,7 @@ TEST(SaveToFileBehaviors, test_save_image_bad_filepath)
   config.blackboard = BT::Blackboard::create();
   config.blackboard->set("file_path", "/tmp/nonexistent_filepath_which_might_fail/");
   config.blackboard->set("file_name", "my_image");
-  config.blackboard->set("input_image", createImage());
+  config.blackboard->set("input_image", std::make_shared<sensor_msgs::msg::Image>(createImage()));
   // (Note: this sets the port remapping rules so the keys on the blackboard are the same as the keys used by the behavior)
   config.input_ports.insert(std::make_pair("file_path", "="));
   config.input_ports.insert(std::make_pair("file_name", "="));
@@ -145,10 +145,10 @@ TEST(SaveToFileBehaviors, test_save_image_bad_filepath)
   // Once the behavior gets ticked it should start RUNNING
   ASSERT_EQ(save_image_behavior->executeTick(), BT::NodeStatus::RUNNING);
 
-  // When the behavior is ticked a second time after waiting a short duration it returns FAILURE without throwing an
-  // exception because it detected that the path does not exist
+  // When the behavior is ticked a second time after waiting a short duration it returns SUCCESS
+  // if it was able to create the directory and save the file
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  ASSERT_EQ(save_image_behavior->executeTick(), BT::NodeStatus::FAILURE);
+  ASSERT_EQ(save_image_behavior->executeTick(), BT::NodeStatus::SUCCESS);
   node.reset();
 }
 

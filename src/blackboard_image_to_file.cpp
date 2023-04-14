@@ -38,6 +38,20 @@ fp::Result<bool> BlackboardImageToFile::doWork()
     return tl::make_unexpected(fp::Internal("Missing input port: " + error.value()));
   }
 
+  // Create save directory if it doesn't exist
+  if (!std::filesystem::exists(filepath.value()))
+  {
+    if (std::filesystem::create_directory(filepath.value()))
+    {
+      RCLCPP_WARN(rclcpp::get_logger(name()), "Save directory did not exist, but was successfully created.");
+    }
+    else
+    {
+      return tl::make_unexpected(
+          fp::Internal("Directory " + filepath.value() + " does not exist, and cannot be created."));
+    }
+  }
+
   // Assemble the file path for saving the image
   std::filesystem::path path(filepath.value());
 
