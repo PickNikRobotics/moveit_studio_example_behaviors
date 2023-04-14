@@ -8,4 +8,4 @@ This repo should be cloned to the `src/` directory of a colcon workspace to be u
 This repo is also compatible with the the sample [MoveIt Studio Workspace](https://github.com/PickNikRobotics/moveit_studio_ws) used during the automated install.
 See the [MoveIt Studio Documentation](https://docs.picknik.ai) for more information.
 
-For information on using this package to create a custom Behavior see the [Create a Custom Behavior](https://docs.picknik.ai/en/stable/tutorials/create_behavior/create_behavior.html) tutorial.
+For information on using this package to create a custom Behavior, see the [Create a Custom Behavior](https://docs.picknik.ai/en/stable/tutorials/create_behavior/create_behavior.html) tutorial.
