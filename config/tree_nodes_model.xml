@@ -44,7 +44,7 @@
                 </p>
             </description>
             <input_port name="input_image" default="{image}">This port expects a sensor_msgs::Image</input_port>
-            <input_port name="file_path" default="/opt/moveit_studio/user_ws">The full path to save the image in.</input_port>
+            <input_port name="file_path" default="~/.config/moveit_studio/saved_behavior_data">The full path to save the image in.</input_port>
             <input_port name="file_name" default="image_raw">The base of the image name to save before adding a timestamp.</input_port>
         </Action>
     </TreeNodesModel>

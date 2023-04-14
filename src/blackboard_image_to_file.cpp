@@ -38,22 +38,34 @@ fp::Result<bool> BlackboardImageToFile::doWork()
     return tl::make_unexpected(fp::Internal("Missing input port: " + error.value()));
   }
 
-  // Create save directory if it doesn't exist
-  if (!std::filesystem::exists(filepath.value()))
+  std::string path_string = filepath.value();
+  // Allow shorthand usage of the HOME directory
+  const char* home_dir = std::getenv("HOME");
+  if (path_string[0] == '~' && home_dir)
   {
-    if (std::filesystem::create_directory(filepath.value()))
+    path_string.replace(0, 1, home_dir);
+  }
+  else if(!home_dir)
+  {
+    return tl::make_unexpected(fp::Internal("HOME environment variable not set"));
+  }
+
+  // Create save directory if it doesn't exist
+  if (!std::filesystem::exists(path_string))
+  {
+    if (std::filesystem::create_directory(path_string))
     {
       RCLCPP_WARN(rclcpp::get_logger(name()), "Save directory did not exist, but was successfully created.");
     }
     else
     {
       return tl::make_unexpected(
-          fp::Internal("Directory " + filepath.value() + " does not exist, and cannot be created."));
+          fp::Internal("Directory " + path_string + " does not exist, and cannot be created."));
     }
   }
 
   // Assemble the file path for saving the image
-  std::filesystem::path path(filepath.value());
+  std::filesystem::path path(path_string);
 
   // Add current timestamp to filename
   time_t now = time(nullptr);
