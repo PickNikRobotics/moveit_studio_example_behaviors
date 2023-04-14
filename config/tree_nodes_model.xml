@@ -26,16 +26,6 @@
             </description>
             <inout_port name="task" default="{mtc_task}">MoveIt Task Constructor task.</inout_port>
         </Action>
-        <Action ID="SaveImageToFile">
-            <metadata subcategory="Perception"/>
-            <description>
-                <p>
-                    Saves a single image to a file as soon as it receives a message on the topic. Filename will follow the syntax of IMAGE_TOPIC_image_raw_YYYYMMDD_HHMMSS.png
-                </p>
-            </description>
-            <input_port name="image_topic" default="/scene_camera/color/image_raw">The topic this behaviour subscribes to.</input_port>
-            <input_port name="file_path" default="/opt/moveit_studio/user_ws">The full path to save the image in.</input_port>
-        </Action>
         <Action ID="ImageToBlackboard">
             <metadata subcategory="Perception"/>
             <description>

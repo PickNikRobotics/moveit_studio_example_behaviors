@@ -22,7 +22,6 @@ add_library(
   src/hello_world.cpp
   src/delayed_message.cpp
   src/setup_mtc_wave_hand.cpp
-  src/save_image_to_file.cpp
   src/image_to_blackboard.cpp
   src/blackboard_image_to_file.cpp
   src/register_behaviors.cpp

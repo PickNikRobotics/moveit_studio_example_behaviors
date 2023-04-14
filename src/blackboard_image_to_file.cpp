@@ -38,7 +38,7 @@ fp::Result<bool> BlackboardImageToFile::doWork()
     return tl::make_unexpected(fp::Internal("Missing input port: " + error.value()));
   }
 
-  // Assemble the file path to save the image to
+  // Assemble the file path for saving the image
   std::filesystem::path path(filepath.value());
 
   // Add current timestamp to filename
@@ -60,22 +60,16 @@ fp::Result<bool> BlackboardImageToFile::doWork()
     }
     else
     {
-      // Since cv:imwrite can fail without throwing an exception
-      shared_resources_->failure_logger->publishFailureMessage(
-          name(),
-          MoveItStudioErrorCode{ moveit_studio_agent_msgs::msg::MotionPlanStatus::FAILURE, "Error writing image: " },
-          std::strerror(errno));
-      return false;
+      // If cv:imwrite fails without throwing an exception
+      return tl::make_unexpected(fp::Internal("Error writing image: " + filename));
     }
   }
   catch (cv::Exception& e)
   {
-    shared_resources_->failure_logger->publishFailureMessage(
-        name(),
-        MoveItStudioErrorCode{ moveit_studio_agent_msgs::msg::MotionPlanStatus::FAILURE, "Image write exception: " },
-        e.what());
-    return false;
+    return tl::make_unexpected(fp::Internal(std::string(e.what()) + " Error writing image: " + filename));
   }
 
 }
-}  // namespace moveit_studio::behaviors
+}  // namespace image_behaviors
+
+

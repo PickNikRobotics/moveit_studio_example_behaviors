@@ -17,13 +17,14 @@
 namespace image_behaviors
 {
 /**
- * @brief Save an image from a topic to disk.
+ * @brief Save an image from the blackboard to disk.
  *
  * @details
- * | Data Port Name | Port Type | Object Type                   |
- * | -------------- | --------- | ----------------------------- |
- * | file_path       | input     | std::string                   |
- * | image_topic    | input     | std::string                   |
+ * | Data Port Name | Port Type | Object Type                          |
+ * | -------------- | --------- | ------------------------------------ |
+ * | file_path      | input     | std::string                          |
+ * | file_name      | input     | std::string                          |
+ * | input_image    | input     | sensor_msgs::msg::Image::SharedPtr   |
  */
 class BlackboardImageToFile final : public moveit_studio::behaviors::AsyncBehaviorBase
 {
@@ -35,9 +36,8 @@ public:
 
 private:
   /**
-   * @brief Saves an image from the specified topic to the location given on the input port
-   * @return Returns void if the subscriber executed successfully. Returns a failure result if the subscriber could not
-   * be created.
+   * @brief Saves an image from the black to the location given on an input port, using the name given on an input port
+   * @return Returns void if the subscriber executed successfully. Returns a failure result if unsuccessful.
    */
   fp::Result<bool> doWork() override;
 
@@ -49,15 +49,5 @@ private:
 
   /** @brief Classes derived from AsyncBehaviorBase must have this shared_future as a class member */
   std::shared_future<fp::Result<bool>> future_;
-
-  /**
-   * @brief Callback for receiving and saving the image
-   */
-  void subscriberCallback(const sensor_msgs::msg::Image::SharedPtr msg);
-
-  std::mutex mutex_;
-  std::condition_variable condition_var_;
-  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
-  bool callback_complete_;
 };
 }  // namespace image_behaviors

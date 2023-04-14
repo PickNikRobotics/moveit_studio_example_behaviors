@@ -16,13 +16,13 @@
 namespace image_behaviors
 {
 /**
- * @brief Save an image from a topic to disk.
+ * @brief Move an image from a topic to the blackboard.
  *
  * @details
- * | Data Port Name | Port Type | Object Type                   |
- * | -------------- | --------- | ----------------------------- |
- * | file_path       | input     | std::string                   |
- * | image_topic    | input     | std::string                   |
+ * | Data Port Name | Port Type | Object Type                         |
+ * | -------------- | --------- | ----------------------------------- |
+ * | input_topic    | input     | std::string                         |
+ * | output_port    | output    | sensor_msgs::msg::Image::SharedPtr  |
  */
 class ImageToBlackboard final : public moveit_studio::behaviors::AsyncBehaviorBase
 {
@@ -34,11 +34,14 @@ public:
 
 private:
   /**
-   * @brief Saves an image from the specified topic to the location given on the input port
-   * @return Returns void if the subscriber executed successfully. Returns a failure result if the subscriber could not
-   * be created.
+   * @brief Wait for an image on the specified topic, then put it on the blackboard
+   * @return Returns an error message if unsuccessful.
    */
   fp::Result<bool> doWork() override;
+  /**
+   * @brief Additional actions to perform if halted
+   */
+  fp::Result<void> doHalt() override;
 
   /** @brief Classes derived from AsyncBehaviorBase must implement getFuture() so that it returns a shared_future class member */
   std::shared_future<fp::Result<bool>>& getFuture() override
@@ -48,16 +51,13 @@ private:
 
   /** @brief Classes derived from AsyncBehaviorBase must have this shared_future as a class member */
   std::shared_future<fp::Result<bool>> future_;
-  std::mutex mutex_;
-  std::condition_variable condition_var_;
-
-  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
-
   /**
    * @brief The image subscriber callback.
-   * @param msg Subscriber message received.
+   * @param msg Image message received.
    */
   void subscriberCallback(const sensor_msgs::msg::Image::SharedPtr msg);
+  rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr subscription_;
+  rclcpp::WaitSet wait_set_;
 
 };
 }  // namespace image_behaviors
