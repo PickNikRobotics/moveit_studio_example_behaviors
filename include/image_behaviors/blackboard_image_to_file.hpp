@@ -36,7 +36,7 @@ public:
 
 private:
   /**
-   * @brief Saves an image from the black to the location given on an input port, using the name given on an input port
+   * @brief Saves an image from the blackboard to the location given on an input port, using the name given on an input port
    * @return Returns void if the subscriber executed successfully. Returns a failure result if unsuccessful.
    */
   fp::Result<bool> doWork() override;
