@@ -29,7 +29,7 @@ BT::NodeStatus DelayedMessage::onStart()
   if (const auto error = moveit_studio::behaviors::maybe_error(maybe_duration); error)
   {
     // If the port was set incorrectly, we will log an error message to the UI and the node will return FAILURE
-    shared_resources_->failure_logger->publishFailureMessage(name(),MoveItStudioErrorCode{ moveit_msgs::msg::MoveItErrorCodes::FAILURE, "Failed to get required values from input data ports." }, error.value());
+    shared_resources_->logger->publishFailureMessage(name(), "Failed to get required values from input data ports." + error.value());
     return BT::NodeStatus::FAILURE;
   }
 
@@ -39,10 +39,9 @@ BT::NodeStatus DelayedMessage::onStart()
   // If the duration is zero, we can log the message immediately
   if (delay_duration_ <= 0)
   {
-    // Log the "Hello, world!" failure message. 
-    // If all the nodes in the Behavior Tree succeed, this message can be found in the Logs tab.
-    // If any of the nodes cause the Behavior Tree to fail, this message (and all other failure messages) will be displayed in the UI
-    shared_resources_->failure_logger->publishFailureMessage(name(),MoveItStudioErrorCode{ moveit_msgs::msg::MoveItErrorCodes::SUCCESS, "Hello, world!" }, "");
+    // Log the "Hello, world!" message. 
+    // Setting the third argument to false ensures the message will be shown immediately
+    shared_resources_->logger->publishInfoMessage(name(), "Hello, world!", false);
     return BT::NodeStatus::SUCCESS;
   }
 
@@ -54,10 +53,9 @@ BT::NodeStatus DelayedMessage::onRunning()
   // If the delay duration has not elapsed since this node was started, return RUNNING
   if(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - start_time_).count() < delay_duration_)
   {
-    // Log the "Hello, world!" failure message. 
-    // If all the nodes in the Behavior Tree succeed, this message can be found in the Logs tab.
-    // If any of the nodes cause the Behavior Tree to fail, this message (and all other failure messages) will be displayed in the UI
-    shared_resources_->failure_logger->publishFailureMessage(name(),MoveItStudioErrorCode{ moveit_msgs::msg::MoveItErrorCodes::SUCCESS, "Hello, world!" }, "");
+    // Log the "Hello, world!" message. 
+    // Setting the third argument to false ensures the message will be shown immediately
+    shared_resources_->logger->publishInfoMessage(name(), "Hello, world!", false);
     return BT::NodeStatus::SUCCESS;
   }
   else
