@@ -24,12 +24,12 @@ TEST(BehaviorTests, test_load_behavior_plugins)
   }
   // Test that ClassLoader is able to find and instantiate each behavior using the package's plugin description info.
   factory.instantiateTreeNode("test_behavior_name", "SetupMTCWaveHand", BT::NodeConfiguration());
-
-  // Test that ClassLoader is able to find and instantiate each behavior using the package's plugin description info.
   factory.instantiateTreeNode("test_behavior_name", "DelayedMessage", BT::NodeConfiguration());
-
-  // Test that ClassLoader is able to find and instantiate each behavior using the package's plugin description info.
   factory.instantiateTreeNode("test_behavior_name", "HelloWorld",
+                              BT::NodeConfiguration());  
+  factory.instantiateTreeNode("test_behavior_name", "ImageToBlackboard",
+                              BT::NodeConfiguration());
+  factory.instantiateTreeNode("test_behavior_name", "BlackboardImageToFile",
                               BT::NodeConfiguration());
 }
 

@@ -19,9 +19,8 @@ BT::PortsList HelloWorld::providedPorts()
 BT::NodeStatus HelloWorld::tick()
 {
   // Do HelloWorld's useful work
-  shared_resources_->failure_logger->publishFailureMessage(
-    name(),
-    MoveItStudioErrorCode{ moveit_msgs::msg::MoveItErrorCodes::SUCCESS, "Hello, world!" }, "");
+  shared_resources_->logger->publishFailureMessage(
+    name(), "Hello, world!" );
 
   // Nodes that return FAILURE will have their error messages displayed in the UI.
   // If this node returns SUCCESS, the failure message will only be printed in the logs
