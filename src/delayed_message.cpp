@@ -22,7 +22,7 @@ BT::NodeStatus DelayedMessage::onStart()
   // Store the time at which this node was first ticked
   start_time_ = std::chrono::steady_clock::now();
 
-  // getInput returns a BT::Optional so we'll store the result temporarily while we check if it was set correctly
+  // getInput returns a BT::Expected so we'll store the result temporarily while we check if it was set correctly
   const auto maybe_duration = getInput<double>("delay_duration");
 
   // The maybe_error function returns a std::optional with an error message if the port was set incorrectly
