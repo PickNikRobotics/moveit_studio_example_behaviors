@@ -1,6 +1,6 @@
 #pragma once
 
-#include <behaviortree_cpp_v3/action_node.h>
+#include <behaviortree_cpp/action_node.h>
 
 // This header includes the SharedResourcesNode type
 #include <moveit_studio_behavior_interface/shared_resources_node.hpp>

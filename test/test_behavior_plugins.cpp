@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <behaviortree_cpp_v3/bt_factory.h>
+#include <behaviortree_cpp/bt_factory.h>
 #include <moveit_studio_behavior_interface/shared_resources_node_loader.hpp>
 #include <pluginlib/class_loader.hpp>
 #include <rclcpp/node.hpp>
