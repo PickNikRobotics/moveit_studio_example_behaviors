@@ -34,7 +34,7 @@ BT::PortsList SetupMTCWaveHand::providedPorts()
   };
 }
 
-fp::Result<bool> SetupMTCWaveHand::doWork()
+tl::expected<bool, std::string> SetupMTCWaveHand::doWork()
 {
   // Retrieve the "task" data port
   const auto task = getInput<moveit::task_constructor::TaskPtr>(kPortIDTask);
@@ -44,7 +44,7 @@ fp::Result<bool> SetupMTCWaveHand::doWork()
   {
     RCLCPP_ERROR_STREAM(kLogger, "Failed to get required values from input data ports:\n" << error.value());
     // Task setup cannot succeed if we failed to retrieve the MTC task shared_ptr from the "task" port, so we return false.
-    return tl::make_unexpected(fp::Internal("Failed to get required values from input data ports: " + error.value()));
+    return tl::make_unexpected("Failed to get required values from input data ports: " + error.value());
   }
 
   // Create a Cartesian path planner used to perform linear moves relative to the end effector frame.

@@ -19,7 +19,8 @@ namespace example_behaviors
 * to allow the Behavior to access a rclcpp Node owned by the Agent's ObjectiveServerNode. 
 * The AsyncBehaviorBase requires a user-implemented function doWork() 
 * which is called within an async process in a separate thread.
-* It returns an fp::Result which contains a bool indicating task success 
+* It returns an tl::expected which contains a bool indicating task success
+* If the task fails, doWork() returns a tl::unexpected which contains a string indicating the error 
 * if the process completed successfully or was canceled, 
 * or an error message if the process failed unexpectedly.
 */
@@ -59,18 +60,18 @@ private:
      * It is very important that behaviors return from being ticked very quickly because if it blocks before returning
      * it will block execution of the entire behavior tree, which may have undesirable consequences for other Behaviors
      * that require a fast update rate to work correctly.
-     * @return An fp::Result which contains a true if the MTC stages were configured and added to the MTC task,
-     * or an error if it failed to retrieve the MTC task from the "task" data port.
+     * @return An tl::expected which contains a true if the MTC stages were configured and added to the MTC task,
+     * or a string if it failed to retrieve the MTC task from the "task" data port.
      */
-    fp::Result<bool> doWork() override;
+    tl::expected<bool, std::string> doWork() override;
 
     /** @brief Classes derived from AsyncBehaviorBase must implement getFuture() so that it returns a shared_future class member */
-    std::shared_future<fp::Result<bool>>& getFuture() override
+    std::shared_future<tl::expected<bool, std::string>>& getFuture() override
     {
     return future_;
     }
     
     /** @brief Classes derived from AsyncBehaviorBase must have this shared_future as a class member */
-    std::shared_future<fp::Result<bool>> future_;
+    std::shared_future<tl::expected<bool, std::string>> future_;
 };
 }  // namespace example_behaviors
