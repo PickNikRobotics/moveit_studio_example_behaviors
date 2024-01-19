@@ -20,7 +20,7 @@
         <Action ID="SetupMTCWaveHand">
             <!-- The MoveIt Studio UI will use this tag to organize Behaviors in the sidebar. -->
             <MetadataFields>
-                <Metadata subcategory="MTC"/>
+                <Metadata subcategory="Task Planning"/>
             </MetadataFields>
             <description>
                 <p>
