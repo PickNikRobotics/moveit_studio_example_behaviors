@@ -12,7 +12,7 @@ constexpr auto kPortIDTask = "task";
 // Define constants for the names of the behavior parameters used by the SetupMTCWaveHand behavior.
 // These defaults are set to match the UR5e robot defined in the moveit_studio_custom_site_config_example package.
 constexpr auto kPrimaryGroupName = "manipulator";
-constexpr auto kHandFrameName = "manual_grasp_link";
+constexpr auto kHandFrameName = "grasp_link";
 
 // Create a rclcpp Logger to use when printing messages to the console.
 const rclcpp::Logger kLogger = rclcpp::get_logger("WaveHello");
