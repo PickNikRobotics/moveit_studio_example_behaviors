@@ -19,7 +19,9 @@
         </Action>
         <Action ID="SetupMTCWaveHand">
             <!-- The MoveIt Studio UI will use this tag to organize Behaviors in the sidebar. -->
-            <metadata subcategory="MTC"/>
+            <MetadataFields>
+                <Metadata subcategory="Task Planning"/>
+            </MetadataFields>
             <description>
                 <p>
                     Wave hello with the end-effector
