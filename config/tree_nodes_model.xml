@@ -18,7 +18,7 @@
             </input_port>
         </Action>
         <Action ID="SetupMTCWaveHand">
-            <!-- The MoveIt Studio UI will use this tag to organize Behaviors in the sidebar. -->
+            <!-- The web app will use this tag to organize Behaviors in the sidebar. -->
             <MetadataFields>
                 <Metadata subcategory="Task Planning"/>
             </MetadataFields>
