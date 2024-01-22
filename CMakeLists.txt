@@ -7,11 +7,13 @@ moveit_package()
 
 find_package(moveit_studio_behavior_interface REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(example_interfaces REQUIRED)
 
 set(
   THIS_PACKAGE_INCLUDE_DEPENDS
   moveit_studio_behavior_interface
   pluginlib
+  example_interfaces
 )
 
 add_library(
@@ -20,6 +22,9 @@ add_library(
   src/delayed_message.cpp
   src/setup_mtc_wave_hand.cpp
   src/register_behaviors.cpp
+  src/add_two_ints_service_client.cpp
+  src/fibonacci_action_client.cpp
+  src/get_string_from_topic.cpp
 )
 target_include_directories(
   example_behaviors
@@ -40,9 +45,9 @@ install(
 
 install(
   DIRECTORY
-    config
+  config
   DESTINATION
-    share/${PROJECT_NAME}
+  share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)
