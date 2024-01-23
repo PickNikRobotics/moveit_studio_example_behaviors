@@ -2,11 +2,10 @@
 <package format="3">
   <name>example_behaviors</name>
   <version>0.0.0</version>
-  <description>A collection of example behaviors for use in MoveIt Studio.</description>
+  <description>A collection of example behaviors for use in MoveIt Pro.</description>
 
-  <maintainer email="studio.maintainers@picknik.ai">MoveIt Studio Maintainer</maintainer>
-
-  <author email="studio.maintainers@picknik.ai">MoveIt Studio Maintainer</author>
+  <maintainer email="studio.maintainers@picknik.ai">MoveIt Pro Maintainer</maintainer>
+  <author email="studio.maintainers@picknik.ai">MoveIt Pro Maintainer</author>
 
   <license>BSD-3-Clause</license>
 
