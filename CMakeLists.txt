@@ -25,6 +25,8 @@ add_library(
   src/add_two_ints_service_client.cpp
   src/fibonacci_action_client.cpp
   src/get_string_from_topic.cpp
+  src/setup_mtc_pick_from_pose.cpp
+  src/setup_mtc_place_from_pose.cpp
 )
 target_include_directories(
   example_behaviors
