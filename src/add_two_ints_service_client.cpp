@@ -15,10 +15,10 @@ BT::PortsList AddTwoIntsServiceClient::providedPorts()
 {
   // This node has three input ports and one output port
   return BT::PortsList({
-    BT::InputPort<std::string>("service_name"),
-    BT::InputPort<int>("addend1"),
-    BT::InputPort<int>("addend2"),
-    BT::OutputPort<int>("result"),
+      BT::InputPort<std::string>("service_name"),
+      BT::InputPort<int>("addend1"),
+      BT::InputPort<int>("addend2"),
+      BT::OutputPort<int>("result"),
   });
 }
 
@@ -32,7 +32,8 @@ tl::expected<std::string, std::string> AddTwoIntsServiceClient::getServiceName()
   return service_name.value();
 }
 
-tl::expected<AddTwoInts::Request, std::string> AddTwoIntsServiceClient::createRequest(){
+tl::expected<AddTwoInts::Request, std::string> AddTwoIntsServiceClient::createRequest()
+{
   const auto a = getInput<int>("addend1");
   const auto b = getInput<int>("addend2");
   if (const auto error = moveit_studio::behaviors::maybe_error(a, b))
@@ -42,7 +43,8 @@ tl::expected<AddTwoInts::Request, std::string> AddTwoIntsServiceClient::createRe
   return example_interfaces::build<AddTwoInts::Request>().a(a.value()).b(b.value());
 }
 
-tl::expected<bool, std::string> AddTwoIntsServiceClient::processResponse(const AddTwoInts::Response& response){
+tl::expected<bool, std::string> AddTwoIntsServiceClient::processResponse(const AddTwoInts::Response& response)
+{
   setOutput<int>("result", response.sum);
   return { true };
 }

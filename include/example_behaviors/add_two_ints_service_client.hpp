@@ -13,7 +13,7 @@ class AddTwoIntsServiceClient final : public ServiceClientBehaviorBase<AddTwoInt
 {
 public:
   AddTwoIntsServiceClient(const std::string& name, const BT::NodeConfiguration& config,
-            const std::shared_ptr<BehaviorContext>& shared_resources);
+                          const std::shared_ptr<BehaviorContext>& shared_resources);
 
   /** @brief Implementation of the required providedPorts() function for the hello_world Behavior. */
   static BT::PortsList providedPorts();
@@ -23,10 +23,10 @@ private:
   tl::expected<std::string, std::string> getServiceName() override;
 
   /**
-  * @brief User-provided function to create the service request.
-  * @return Returns a service request message. If not successful, returns an error message. Note that the criteria for
-  * success or failure is defined by the user's implementation of this function.
-  */
+   * @brief User-provided function to create the service request.
+   * @return Returns a service request message. If not successful, returns an error message. Note that the criteria for
+   * success or failure is defined by the user's implementation of this function.
+   */
   tl::expected<AddTwoInts::Request, std::string> createRequest() override;
 
   /** @brief Optional user-provided function to process the service response after the service has finished. */
