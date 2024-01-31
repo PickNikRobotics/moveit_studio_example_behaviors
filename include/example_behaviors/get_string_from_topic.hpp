@@ -12,7 +12,7 @@ class GetStringFromTopic final : public GetMessageFromTopicBehaviorBase<std_msgs
 {
 public:
   GetStringFromTopic(const std::string& name, const BT::NodeConfiguration& config,
-            const std::shared_ptr<BehaviorContext>& shared_resources);
+                     const std::shared_ptr<BehaviorContext>& shared_resources);
 
 private:
   /** @brief Classes derived from AsyncBehaviorBase must implement getFuture() so that it returns a shared_future class member */

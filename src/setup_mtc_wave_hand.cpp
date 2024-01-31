@@ -16,13 +16,12 @@ constexpr auto kHandFrameName = "grasp_link";
 
 // Create a rclcpp Logger to use when printing messages to the console.
 const rclcpp::Logger kLogger = rclcpp::get_logger("WaveHello");
-}
+}  // namespace
 
 namespace example_behaviors
 {
-SetupMTCWaveHand::SetupMTCWaveHand(
-    const std::string& name, const BT::NodeConfiguration& config,
-    const std::shared_ptr<moveit_studio::behaviors::BehaviorContext>& shared_resources)
+SetupMTCWaveHand::SetupMTCWaveHand(const std::string& name, const BT::NodeConfiguration& config,
+                                   const std::shared_ptr<moveit_studio::behaviors::BehaviorContext>& shared_resources)
   : moveit_studio::behaviors::AsyncBehaviorBase(name, config, shared_resources)
 {
 }
@@ -50,7 +49,8 @@ tl::expected<bool, std::string> SetupMTCWaveHand::doWork()
   // Create a Cartesian path planner used to perform linear moves relative to the end effector frame.
   auto cartesian_planner = std::make_shared<moveit::task_constructor::solvers::CartesianPath>();
 
-  // Create an MTC stage to define a motion that translates along the end effector X+ axis. Assumes that the robot is not already at its joint limits.
+  // Create an MTC stage to define a motion that translates along the end effector X+ axis. Assumes that the robot is
+  // not already at its joint limits.
 
   // Set the direction to move along as a TwistStamped.
   geometry_msgs::msg::TwistStamped wave_first_direction;
@@ -60,8 +60,8 @@ tl::expected<bool, std::string> SetupMTCWaveHand::doWork()
   // Create a new MTC stage
   {
     // Create a new MoveRelative stage that uses the Cartesian motion planner
-    auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>(
-        std::string("Wave One Direction"), cartesian_planner);
+    auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>(std::string("Wave One Direction"),
+                                                                                  cartesian_planner);
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT);
     // Configure the stage to move the UR-5e's arm.
     stage->setGroup(kPrimaryGroupName);
@@ -75,7 +75,8 @@ tl::expected<bool, std::string> SetupMTCWaveHand::doWork()
     task.value()->add(std::move(stage));
   }
 
-  // Create a second MTC stage to define a motion that translates along the end effector X- axis, which is the opposite motion from what we did in the previous stage.
+  // Create a second MTC stage to define a motion that translates along the end effector X- axis, which is the opposite
+  // motion from what we did in the previous stage.
 
   // Set the direction to move along as a TwistStamped.
   geometry_msgs::msg::TwistStamped wave_second_direction;
@@ -99,7 +100,7 @@ tl::expected<bool, std::string> SetupMTCWaveHand::doWork()
     task.value()->add(std::move(stage));
   }
 
-  //Once the work is done, we can return true so that the node returns SUCCESS next time it is ticked
+  // Once the work is done, we can return true so that the node returns SUCCESS next time it is ticked
   return true;
 }
 

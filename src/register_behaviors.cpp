@@ -17,15 +17,16 @@ class ExampleBehaviorsLoader : public moveit_studio::behaviors::SharedResourcesN
 {
 public:
   void registerBehaviors(BT::BehaviorTreeFactory& factory,
-                     const std::shared_ptr<moveit_studio::behaviors::BehaviorContext>& shared_resources) override
+                         const std::shared_ptr<moveit_studio::behaviors::BehaviorContext>& shared_resources) override
   {
     moveit_studio::behaviors::registerBehavior<HelloWorld>(factory, "HelloWorld", shared_resources);
     moveit_studio::behaviors::registerBehavior<DelayedMessage>(factory, "DelayedMessage", shared_resources);
     moveit_studio::behaviors::registerBehavior<SetupMTCWaveHand>(factory, "SetupMTCWaveHand", shared_resources);
     moveit_studio::behaviors::registerBehavior<GetStringFromTopic>(factory, "GetStringFromTopic", shared_resources);
-    moveit_studio::behaviors::registerBehavior<AddTwoIntsServiceClient>(factory, "AddTwoIntsServiceClient", shared_resources);
-    moveit_studio::behaviors::registerBehavior<FibonacciActionClient>(factory, "FibonacciActionClient", shared_resources);
-  
+    moveit_studio::behaviors::registerBehavior<AddTwoIntsServiceClient>(factory, "AddTwoIntsServiceClient",
+                                                                        shared_resources);
+    moveit_studio::behaviors::registerBehavior<FibonacciActionClient>(factory, "FibonacciActionClient",
+                                                                      shared_resources);
   }
 };
 }  // namespace example_behaviors

@@ -16,10 +16,10 @@ BT::PortsList FibonacciActionClient::providedPorts()
 {
   // This node has two input ports and two output port
   return BT::PortsList({
-    BT::InputPort<std::string>("action_name"),
-    BT::InputPort<std::size_t>("order"),
-    BT::OutputPort<std::vector<int>>("feedback"),
-    BT::OutputPort<std::vector<int>>("result"),
+      BT::InputPort<std::string>("action_name"),
+      BT::InputPort<std::size_t>("order"),
+      BT::OutputPort<std::vector<int>>("feedback"),
+      BT::OutputPort<std::vector<int>>("result"),
   });
 }
 
@@ -45,8 +45,7 @@ tl::expected<Fibonacci::Goal, std::string> FibonacciActionClient::createGoal()
   return example_interfaces::build<Fibonacci::Goal>().order(order.value());
 }
 
-tl::expected<bool, std::string> FibonacciActionClient::processResult(
-    const std::shared_ptr<Fibonacci::Result> result)
+tl::expected<bool, std::string> FibonacciActionClient::processResult(const std::shared_ptr<Fibonacci::Result> result)
 {
   std::stringstream stream;
   for (const auto& value : result->sequence)
@@ -63,8 +62,7 @@ tl::expected<bool, std::string> FibonacciActionClient::processResult(
   return { true };
 }
 
-void FibonacciActionClient::processFeedback(
-    const std::shared_ptr<const Fibonacci::Feedback> feedback)
+void FibonacciActionClient::processFeedback(const std::shared_ptr<const Fibonacci::Feedback> feedback)
 {
   std::stringstream stream;
   for (const auto& value : feedback->sequence)

@@ -3,8 +3,8 @@
 #include <moveit_studio_behavior_interface/action_client_behavior_base.hpp>
 #include <example_interfaces/action/fibonacci.hpp>
 
-using moveit_studio::behaviors::BehaviorContext;
 using moveit_studio::behaviors::ActionClientBehaviorBase;
+using moveit_studio::behaviors::BehaviorContext;
 using Fibonacci = example_interfaces::action::Fibonacci;
 
 namespace example_behaviors
@@ -13,7 +13,7 @@ class FibonacciActionClient final : public ActionClientBehaviorBase<Fibonacci>
 {
 public:
   FibonacciActionClient(const std::string& name, const BT::NodeConfiguration& config,
-            const std::shared_ptr<BehaviorContext>& shared_resources);
+                        const std::shared_ptr<BehaviorContext>& shared_resources);
 
   /** @brief Implementation of the required providedPorts() function for the hello_world Behavior. */
   static BT::PortsList providedPorts();
