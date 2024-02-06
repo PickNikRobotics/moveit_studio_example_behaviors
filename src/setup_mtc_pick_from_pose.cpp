@@ -16,25 +16,21 @@ namespace
 {
 const auto kLogger = rclcpp::get_logger("SetupMTCPickFromPose");
 using MoveItErrorCodes = moveit_msgs::msg::MoveItErrorCodes;
-using moveit_studio::behaviors::parseParameter;
 
 // Port names for input and output ports.
 constexpr auto kPortIDTask = "task";
-constexpr auto kPortIDObjectiveParameters = "parameters";
 constexpr auto kPortIDGraspPose = "grasp_pose";
 
-// Parameter names for the behavior parameters.
-constexpr auto kWorldFrameNameParameter = "world_frame_name";
-constexpr auto kArmGroupNameParameter = "arm_group_name";
-constexpr auto kEndEffectorGroupNameParameter = "end_effector_group_name";
-constexpr auto kEndEffectorNameParameter = "end_effector_name";
-constexpr auto kHandFrameNameParameter = "hand_frame_name";
-constexpr auto kHandOpenNameParameter = "end_effector_opened_pose_name";
-constexpr auto kHandCloseNameParameter = "end_effector_closed_pose_name";
-constexpr auto kApproachDistanceParameter = "approach_distance";
-constexpr auto kLiftDistanceParameter = "lift_distance";
-
-// behavior constants
+// Behavior constants
+constexpr auto kWorldFrame = "/world";
+constexpr auto kArmGroupName = "manipulator";
+constexpr auto kEndEffectorGroupName = "gripper";
+constexpr auto kEndEffectorName = "moveit_ee";
+constexpr auto kHandFrameName = "grasp_link";
+constexpr auto kHandOpenName = "open";
+constexpr auto kHandCloseName = "close";
+constexpr auto kApproachDistance = 0.1;
+constexpr auto kLiftDistance = 0.1;
 constexpr auto kPropertyNameTrajectoryExecutionInfo = "trajectory_execution_info";
 constexpr double kIKTimeoutSeconds = 1.0;
 constexpr int kMaxIKSolutions = 20;
@@ -56,7 +52,6 @@ BT::PortsList SetupMtcPickFromPose::providedPorts()
   return {
     BT::BidirectionalPort<moveit::task_constructor::TaskPtr>(kPortIDTask),
     BT::InputPort<geometry_msgs::msg::PoseStamped>(kPortIDGraspPose),
-    BT::InputPort<YAML::Node>(kPortIDObjectiveParameters),
   };
 }
 
@@ -69,46 +64,12 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   // ----------------------------------------
   const auto grasp_pose = getInput<geometry_msgs::msg::PoseStamped>(kPortIDGraspPose);
   const auto task = getInput<moveit::task_constructor::TaskPtr>(kPortIDTask);
-  const auto objective_parameters = getInput<YAML::Node>(kPortIDObjectiveParameters);
 
   // Check that all required input data ports were set
-  if (const auto error = maybe_error(grasp_pose, task, objective_parameters); error)
+  if (const auto error = maybe_error(grasp_pose, task); error)
   {
     shared_resources_->logger->publishFailureMessage(name(), "Failed to get required value from input data port: " +
                                                                  error.value());
-    return BT::NodeStatus::FAILURE;
-  }
-
-  // ---------------------------------------------------------------------------
-  // Load behavior specific parameters defined in a separate configuration file.
-  // ---------------------------------------------------------------------------
-  const auto behavior_parameters = parseParameter<YAML::Node>(objective_parameters.value(), name());
-  if (!behavior_parameters)
-  {
-    shared_resources_->logger->publishFailureMessage(name(),
-                                                     "Could not find behavior specific parameters in the configuration "
-                                                     "file: " +
-                                                         behavior_parameters.error());
-    return BT::NodeStatus::FAILURE;
-  }
-
-  const auto world_frame_name = parseParameter<std::string>(behavior_parameters.value(), kWorldFrameNameParameter);
-  const auto arm_group_name = parseParameter<std::string>(behavior_parameters.value(), kArmGroupNameParameter);
-  const auto end_effector_group_name =
-      parseParameter<std::string>(behavior_parameters.value(), kEndEffectorGroupNameParameter);
-  const auto end_effector_name = parseParameter<std::string>(behavior_parameters.value(), kEndEffectorNameParameter);
-  const auto hand_frame_name = parseParameter<std::string>(behavior_parameters.value(), kHandFrameNameParameter);
-  const auto hand_opened_name = parseParameter<std::string>(behavior_parameters.value(), kHandOpenNameParameter);
-  const auto hand_closed_name = parseParameter<std::string>(behavior_parameters.value(), kHandCloseNameParameter);
-  const auto approach_distance = parseParameter<double>(behavior_parameters.value(), kApproachDistanceParameter);
-  const auto lift_distance = parseParameter<double>(behavior_parameters.value(), kLiftDistanceParameter);
-
-  if (const auto error =
-          moveit_studio::behaviors::maybe_error(world_frame_name, arm_group_name, end_effector_group_name,
-                                                end_effector_name, hand_frame_name, approach_distance, lift_distance);
-      error)
-  {
-    shared_resources_->logger->publishFailureMessage(name(), "Parsing behavior parameters failed: " + *error);
     return BT::NodeStatus::FAILURE;
   }
 
@@ -141,8 +102,8 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
         std::make_unique<moveit::task_constructor::stages::MoveTo>("Open hand", mtc_joint_interpolation_planner);
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
                                           { kPropertyNameTrajectoryExecutionInfo });
-    stage->setGroup(end_effector_group_name.value());
-    stage->setGoal(hand_opened_name.value());
+    stage->setGroup(kEndEffectorGroupName);
+    stage->setGoal(kHandOpenName);
     task.value()->add(std::move(stage));
   }
 
@@ -152,16 +113,16 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
                                   task.value()->properties().get(kPropertyNameTrajectoryExecutionInfo)));
   container->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT);
 
-  container->setProperty("group", arm_group_name.value());
-  container->setProperty("hand", end_effector_group_name.value());
-  container->setProperty("eef", end_effector_name.value());
-  container->setProperty("ik_frame", hand_frame_name.value());
+  container->setProperty("group", kArmGroupName);
+  container->setProperty("hand", kEndEffectorGroupName);
+  container->setProperty("eef", kEndEffectorName);
+  container->setProperty("ik_frame", kHandFrameName);
 
   /** Move To Pre-Grasp Pose **/
   {
     auto stage = std::make_unique<moveit::task_constructor::stages::Connect>(
-        "Move to Pre-Approach Pose", moveit::task_constructor::stages::Connect::GroupPlannerVector{
-                                         { arm_group_name.value(), mtc_pipeline_planner } });
+        "Move to Pre-Approach Pose",
+        moveit::task_constructor::stages::Connect::GroupPlannerVector{ { kArmGroupName, mtc_pipeline_planner } });
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
                                           { kPropertyNameTrajectoryExecutionInfo });
     stage->setTimeout(10);
@@ -179,13 +140,13 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     stage->allowCollisions(kSceneObjectName,
                            task.value()
                                ->getRobotModel()
-                               ->getJointModelGroup(end_effector_group_name.value())
+                               ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            true);
     container->add(std::move(stage));
   }
 
-  const Eigen::Vector3d approach_vector{ 0.0, 0.0, approach_distance.value() };
+  const Eigen::Vector3d approach_vector{ 0.0, 0.0, kApproachDistance };
 
   /** Approach Grasp **/
   {
@@ -194,12 +155,12 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
                                           { kPropertyNameTrajectoryExecutionInfo });
     stage->restrictDirection(moveit::task_constructor::stages::MoveRelative::BACKWARD);
-    stage->setGroup(arm_group_name.value());
-    stage->setIKFrame(hand_frame_name.value());
+    stage->setGroup(kArmGroupName);
+    stage->setIKFrame(kHandFrameName);
 
     geometry_msgs::msg::Vector3Stamped approach_vector_msg;
     tf2::toMsg(approach_vector, approach_vector_msg.vector);
-    approach_vector_msg.header.frame_id = hand_frame_name.value();
+    approach_vector_msg.header.frame_id = kHandFrameName;
 
     stage->setDirection(approach_vector_msg);
     stage->setTimeout(10);
@@ -215,7 +176,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     stage->allowCollisions(kSceneObjectName,
                            task.value()
                                ->getRobotModel()
-                               ->getJointModelGroup(end_effector_group_name.value())
+                               ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            false);
     container->insert(std::move(stage));
@@ -238,7 +199,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     auto wrapper = std::make_unique<moveit::task_constructor::stages::ComputeIK>("Pose IK", std::move(stage));
     wrapper->setMaxIKSolutions(kMaxIKSolutions);
     wrapper->setTimeout(kIKTimeoutSeconds);
-    wrapper->setIKFrame(hand_frame_name.value());
+    wrapper->setIKFrame(kHandFrameName);
     wrapper->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT, { "eef", "group" });
     wrapper->properties().configureInitFrom(moveit::task_constructor::Stage::INTERFACE, { "target_pose" });
     wrapper->setIgnoreCollisions(true);
@@ -254,7 +215,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     stage->allowCollisions(kSceneObjectName,
                            task.value()
                                ->getRobotModel()
-                               ->getJointModelGroup(end_effector_group_name.value())
+                               ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            true);
     container->insert(std::move(stage));
@@ -266,8 +227,8 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
         std::make_unique<moveit::task_constructor::stages::MoveTo>("Close hand", mtc_joint_interpolation_planner);
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
                                           { kPropertyNameTrajectoryExecutionInfo });
-    stage->setGroup(end_effector_group_name.value());
-    stage->setGoal(hand_closed_name.value());
+    stage->setGroup(kEndEffectorGroupName);
+    stage->setGoal(kHandCloseName);
     container->add(std::move(stage));
   }
 
@@ -275,7 +236,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   {
     auto stage = std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Attach");
 
-    stage->attachObject(kSceneObjectName, kHandFrameNameParameter);
+    stage->attachObject(kSceneObjectName, kHandFrameName);
     container->add(std::move(stage));
   }
 
@@ -284,12 +245,12 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>("Lift", mtc_cartesian_planner);
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
                                           { kPropertyNameTrajectoryExecutionInfo });
-    stage->setGroup(arm_group_name.value());
-    stage->setIKFrame(hand_frame_name.value());
+    stage->setGroup(kArmGroupName);
+    stage->setIKFrame(kHandFrameName);
 
     geometry_msgs::msg::Vector3Stamped lift_vector_msg;
-    lift_vector_msg.header.frame_id = world_frame_name.value();
-    lift_vector_msg.vector.z = lift_distance.value();
+    lift_vector_msg.header.frame_id = kWorldFrame;
+    lift_vector_msg.vector.z = kLiftDistance;
 
     stage->setDirection(lift_vector_msg);
     container->add(std::move(stage));
@@ -301,12 +262,12 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>("Retreat", mtc_cartesian_planner);
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
                                           { kPropertyNameTrajectoryExecutionInfo });
-    stage->setGroup(arm_group_name.value());
-    stage->setIKFrame(hand_frame_name.value());
+    stage->setGroup(kArmGroupName);
+    stage->setIKFrame(kHandFrameName);
 
     geometry_msgs::msg::Vector3Stamped retreat_vector_msg;
     tf2::toMsg(approach_vector * -1, retreat_vector_msg.vector);
-    retreat_vector_msg.header.frame_id = hand_frame_name.value();
+    retreat_vector_msg.header.frame_id = kHandFrameName;
 
     stage->setDirection(retreat_vector_msg);
     container->add(std::move(stage));
@@ -320,7 +281,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     stage->allowCollisions(kSceneObjectName,
                            task.value()
                                ->getRobotModel()
-                               ->getJointModelGroup(end_effector_group_name.value())
+                               ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            false);
     container->add(std::move(stage));

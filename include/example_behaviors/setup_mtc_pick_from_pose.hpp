@@ -16,7 +16,6 @@ namespace example_behaviors
  * | -------------- |---------------|-------------------------------------------------|
  * | task           | Bidirectional | std::shared_ptr<moveit::task_constructor::Task> |
  * | grasp_pose     | Input         | geometry_msgs::msg::PoseStamped                 |
- * | parameters     | Input         | YAML::Node                                      |
  */
 class SetupMtcPickFromPose final : public moveit_studio::behaviors::SharedResourcesNode<BT::SyncActionNode>
 {
