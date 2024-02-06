@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.16.3)
-project(example_behaviors)
+cmake_minimum_required(VERSION 3.22)
+project(moveit_studio_example_behaviors)
 
 # Set MoveIt's typical CMake settings, including C++ standard version
 find_package(moveit_common REQUIRED)
@@ -47,7 +47,7 @@ install(
 
 install(
   DIRECTORY
-  config
+  config objectives
   DESTINATION
   share/${PROJECT_NAME}
 )
