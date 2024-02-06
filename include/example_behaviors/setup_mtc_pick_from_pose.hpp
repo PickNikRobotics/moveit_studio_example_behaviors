@@ -21,11 +21,11 @@ namespace example_behaviors
 class SetupMtcPickFromPose final : public moveit_studio::behaviors::SharedResourcesNode<BT::SyncActionNode>
 {
 public:
-  SetupMtcPickFromPose(const std::string &name, const BT::NodeConfiguration &config,
-                       const std::shared_ptr<moveit_studio::behaviors::BehaviorContext> &shared_resources);
+  SetupMtcPickFromPose(const std::string& name, const BT::NodeConfiguration& config,
+                       const std::shared_ptr<moveit_studio::behaviors::BehaviorContext>& shared_resources);
 
   static BT::PortsList providedPorts();
 
   BT::NodeStatus tick() override;
 };
-}  // namespace pick_and_place_mtc
+}  // namespace example_behaviors

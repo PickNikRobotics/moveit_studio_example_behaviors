@@ -162,7 +162,8 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     auto stage = std::make_unique<moveit::task_constructor::stages::Connect>(
         "Move to Pre-Approach Pose", moveit::task_constructor::stages::Connect::GroupPlannerVector{
                                          { arm_group_name.value(), mtc_pipeline_planner } });
-    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT, { kPropertyNameTrajectoryExecutionInfo });
+    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
+                                          { kPropertyNameTrajectoryExecutionInfo });
     stage->setTimeout(10);
     container->add(std::move(stage));
   }
@@ -190,7 +191,8 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   {
     // Send relative move to MTC stage
     auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>("Approach", mtc_cartesian_planner);
-    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT, { kPropertyNameTrajectoryExecutionInfo });
+    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
+                                          { kPropertyNameTrajectoryExecutionInfo });
     stage->restrictDirection(moveit::task_constructor::stages::MoveRelative::BACKWARD);
     stage->setGroup(arm_group_name.value());
     stage->setIKFrame(hand_frame_name.value());
@@ -262,7 +264,8 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::MoveTo>("Close hand", mtc_joint_interpolation_planner);
-    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT, { kPropertyNameTrajectoryExecutionInfo });
+    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
+                                          { kPropertyNameTrajectoryExecutionInfo });
     stage->setGroup(end_effector_group_name.value());
     stage->setGoal(hand_closed_name.value());
     container->add(std::move(stage));
@@ -270,8 +273,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
 
   /** Attach Object **/
   {
-    auto stage =
-        std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Attach");
+    auto stage = std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Attach");
 
     stage->attachObject(kSceneObjectName, kHandFrameNameParameter);
     container->add(std::move(stage));
@@ -280,7 +282,8 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   /** Lift Object **/
   {
     auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>("Lift", mtc_cartesian_planner);
-    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT, { kPropertyNameTrajectoryExecutionInfo });
+    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
+                                          { kPropertyNameTrajectoryExecutionInfo });
     stage->setGroup(arm_group_name.value());
     stage->setIKFrame(hand_frame_name.value());
 
@@ -296,7 +299,8 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   {
     // Send relative move to MTC stage
     auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>("Retreat", mtc_cartesian_planner);
-    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT, { kPropertyNameTrajectoryExecutionInfo });
+    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
+                                          { kPropertyNameTrajectoryExecutionInfo });
     stage->setGroup(arm_group_name.value());
     stage->setIKFrame(hand_frame_name.value());
 

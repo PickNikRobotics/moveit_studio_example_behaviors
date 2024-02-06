@@ -28,4 +28,4 @@ public:
 
   BT::NodeStatus tick() override;
 };
-}  // namespace pick_and_place_mtc
+}  // namespace example_behaviors
