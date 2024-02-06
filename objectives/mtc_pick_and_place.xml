@@ -4,7 +4,7 @@
   <BehaviorTree ID="MTC Pick And Place" _description="" _favorite="true" _hardcoded="false">
     <Control ID="Sequence" name="TopLevelSequence">
       <Action ID="RetrieveWaypoint" waypoint_name="Home" waypoint_joint_state="{target_joint_state}"/>
-      <Control ID="Parallel" success_count="2" failure_count="1">
+      <Control ID="Sequence" name="Pick and Place">
         <Control ID="Sequence" name="Pick">
           <Action ID="InitializeMTCTask" task_id="pick_task" controller_names="/joint_trajectory_controller /robotiq_gripper_controller" task="{mtc_pick_task}"/>
           <Action ID="SetupMTCCurrentState" task="{mtc_pick_task}"/>
