@@ -91,40 +91,6 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   container->setProperty("eef", kEndEffectorName);
   container->setProperty("ik_frame", kHandFrameName);
 
-  // Spawn object
-  // This stage spawns a collision object for picking
-  {
-    auto stage = std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Spawn object");
-    moveit_msgs::msg::CollisionObject object;
-    object.id = kSceneObjectName;
-    object.header.frame_id = "world";
-    object.pose = grasp_pose.value().pose;
-    object.primitives.resize(1);
-    object.primitives[0].type = shape_msgs::msg::SolidPrimitive::BOX;
-    object.primitives[0].dimensions = { 0.05, 0.05, 0.05 };
-    // object.pose.position.z += 2;
-    stage->addObject(object);
-    container->add(std::move(stage));
-  }
-
-  /** Allow object to collide with everything expect the robot **/
-  {
-    auto stage = std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>(
-        "Allow collision (object, everything-but-the-robot)");
-    // Allow the object to collide with all objects which are not part of the arm or gripper group
-    stage->allowCollisions(kSceneObjectName, true);
-    stage->allowCollisions(kSceneObjectName,
-                           task.value()
-                               ->getRobotModel()
-                               ->getJointModelGroup(kEndEffectorGroupName)
-                               ->getLinkModelNamesWithCollisionGeometry(),
-                           false);
-    stage->allowCollisions(
-        kSceneObjectName,
-        task.value()->getRobotModel()->getJointModelGroup(kArmGroupName)->getLinkModelNamesWithCollisionGeometry(),
-        false);
-    container->add(std::move(stage));
-  }
   /** Open Hand **/
   {
     auto stage =
@@ -155,12 +121,6 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 1 (hand,object)");
 
-    stage->allowCollisions(kSceneObjectName,
-                           task.value()
-                               ->getRobotModel()
-                               ->getJointModelGroup(kEndEffectorGroupName)
-                               ->getLinkModelNamesWithCollisionGeometry(),
-                           true);
     stage->allowCollisions(kSceneObjectNameOctomap,
                            task.value()
                                ->getRobotModel()
@@ -197,12 +157,6 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 2 (hand,object)");
-    stage->allowCollisions(kSceneObjectName,
-                           task.value()
-                               ->getRobotModel()
-                               ->getJointModelGroup(kEndEffectorGroupName)
-                               ->getLinkModelNamesWithCollisionGeometry(),
-                           false);
     stage->allowCollisions(kSceneObjectNameOctomap,
                            task.value()
                                ->getRobotModel()
@@ -242,12 +196,6 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 3 (hand,object)");
-    stage->allowCollisions(kSceneObjectName,
-                           task.value()
-                               ->getRobotModel()
-                               ->getJointModelGroup(kEndEffectorGroupName)
-                               ->getLinkModelNamesWithCollisionGeometry(),
-                           true);
     stage->allowCollisions(kSceneObjectNameOctomap,
                            task.value()
                                ->getRobotModel()
@@ -265,14 +213,6 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
                                           { kPropertyNameTrajectoryExecutionInfo });
     stage->setGroup(kEndEffectorGroupName);
     stage->setGoal(kHandCloseName);
-    container->add(std::move(stage));
-  }
-
-  /** Attach Object **/
-  {
-    auto stage = std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Attach");
-
-    stage->attachObject(kSceneObjectName, kHandFrameName);
     container->add(std::move(stage));
   }
 
@@ -314,12 +254,6 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Forbid collision (hand,object)");
-    stage->allowCollisions(kSceneObjectName,
-                           task.value()
-                               ->getRobotModel()
-                               ->getJointModelGroup(kEndEffectorGroupName)
-                               ->getLinkModelNamesWithCollisionGeometry(),
-                           false);
     stage->allowCollisions(kSceneObjectNameOctomap,
                            task.value()
                                ->getRobotModel()

@@ -3,24 +3,18 @@
   <!-- ////////// -->
   <BehaviorTree ID="MTC Pick And Place" _description="" _favorite="true" _hardcoded="false">
     <Control ID="Sequence" name="TopLevelSequence">
-      <Action ID="RetrieveWaypoint" waypoint_name="Home" waypoint_joint_state="{target_joint_state}"/>
       <Control ID="Sequence" name="Pick and Place">
         <Control ID="Sequence" name="Pick">
+          <Action ID="CreateStampedPose" reference_frame="world" position_xyz="-0.59; 0.0; 0.03" orientation_xyzw="0.707;-0.707;0.0;0.0" stamped_pose="{pick_pose}"/>
           <Action ID="InitializeMTCTask" task_id="pick_task" controller_names="/joint_trajectory_controller /robotiq_gripper_controller" task="{mtc_pick_task}"/>
           <Action ID="SetupMTCCurrentState" task="{mtc_pick_task}"/>
-          <Action ID="CreateStampedPose" reference_frame="world" position_xyz="-0.59; 0.0; 0.03" orientation_xyzw="0.707;-0.707;0.0;0.0" stamped_pose="{pick_pose}"/>
           <Action ID="SetupMtcPickFromPose" grasp_pose="{pick_pose}" task="{mtc_pick_task}"/>
           <Action ID="PlanMTCTask" task="{mtc_pick_task}" solution="{mtc_pick_solution}"/>
           <Action ID="ExecuteMTCTask" solution="{mtc_pick_solution}"/>
-          <Action ID="InitializeMTCTask" task_id="move_to_home_task" controller_names="/joint_trajectory_controller /robotiq_gripper_controller" task="{mtc_move_to_home_task}"/>
-          <Action ID="SetupMTCCurrentState" task="{mtc_move_to_home_task}"/>
-          <Action ID="SetupMTCMoveToJointState" planning_group_name="manipulator" joint_state="{joint_state}" use_all_planners="false" constraints="" task="{mtc_task}"/>
-          <Action ID="PlanMTCTask" task="{mtc_move_to_home_task}" solution="{mtc_move_to_home_solution}"/>
-          <Action ID="ExecuteMTCTask" solution="{mtc_move_to_home_solution}"/>
         </Control>
         <Control ID="Sequence" name="Place">
           <Action ID="InitializeMTCTask" task_id="place_task" controller_names="/joint_trajectory_controller /robotiq_gripper_controller" task="{mtc_place_task}"/>
-          <Action ID="SetupMTCFixedJointState" planning_scene_msg="{planning_scene}" joint_state_msg="{target_joint_state}" task="{mtc_place_task}"/>
+          <Action ID="SetupMTCFixedJointState" planning_scene_msg="{planning_scene}" joint_state_msg="{joint_state}" task="{mtc_place_task}"/>
           <Action ID="CreateStampedPose" reference_frame="world" position_xyz="0.73; 0.06;-0.12" orientation_xyzw="-0.5;-0.5;0.5;0.5" stamped_pose="{place_pose}"/>
           <Action ID="SetupMtcPlaceFromPose" grasp_pose="{place_pose}" task="{mtc_place_task}"/>
           <Action ID="PlanMTCTask" task="{mtc_place_task}" solution="{mtc_place_solution}"/>
