@@ -27,7 +27,6 @@ constexpr auto kArmGroupName = "manipulator";
 constexpr auto kEndEffectorGroupName = "gripper";
 constexpr auto kEndEffectorName = "moveit_ee";
 constexpr auto kHandFrameName = "grasp_link";
-constexpr auto kHandOpenName = "open";
 constexpr auto kHandCloseName = "close";
 constexpr auto kApproachDistance = 0.1;
 constexpr auto kLiftDistance = 0.1;
@@ -35,7 +34,6 @@ constexpr auto kPropertyNameTrajectoryExecutionInfo = "trajectory_execution_info
 constexpr double kIKTimeoutSeconds = 1.0;
 constexpr int kMaxIKSolutions = 20;
 constexpr auto kSceneObjectNameOctomap = "<octomap>";
-constexpr auto kSceneObjectName = "object";
 }  // namespace
 
 namespace example_behaviors
@@ -90,17 +88,6 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   container->setProperty("hand", kEndEffectorGroupName);
   container->setProperty("eef", kEndEffectorName);
   container->setProperty("ik_frame", kHandFrameName);
-
-  /** Open Hand **/
-  {
-    auto stage =
-        std::make_unique<moveit::task_constructor::stages::MoveTo>("Open hand", mtc_joint_interpolation_planner);
-    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
-                                          { kPropertyNameTrajectoryExecutionInfo });
-    stage->setGroup(kEndEffectorGroupName);
-    stage->setGoal(kHandOpenName);
-    container->add(std::move(stage));
-  }
 
   /** Move To Pre-Grasp Pose **/
   {
