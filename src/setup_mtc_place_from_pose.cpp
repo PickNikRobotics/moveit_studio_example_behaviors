@@ -19,7 +19,7 @@ using MoveItErrorCodes = moveit_msgs::msg::MoveItErrorCodes;
 
 // Port names for input and output ports.
 constexpr auto kPortIDTask = "task";
-constexpr auto kPortIDGraspPose = "grasp_pose";
+constexpr auto kPortIDGraspPose = "place_pose";
 
 // Behavior constants
 constexpr auto kWorldFrame = "/world";
@@ -62,11 +62,11 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
   // ----------------------------------------
   // Load data from the behavior input ports.
   // ----------------------------------------
-  const auto grasp_pose = getInput<geometry_msgs::msg::PoseStamped>(kPortIDGraspPose);
+  const auto place_pose = getInput<geometry_msgs::msg::PoseStamped>(kPortIDGraspPose);
   const auto task = getInput<moveit::task_constructor::TaskPtr>(kPortIDTask);
 
   // Check that all required input data ports were set
-  if (const auto error = maybe_error(grasp_pose, task); error)
+  if (const auto error = maybe_error(place_pose, task); error)
   {
     shared_resources_->logger->publishFailureMessage(name(), "Failed to get required value from input data port: " +
                                                                  error.value());
@@ -125,12 +125,10 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
   }
 
   // Set Allowed Collisions
-  // This stage allows collisions between the gripper and the octomap before the stage (during the Approach Grasp
-  // stage, so the gripper can move into the octomap), and forbids them after this stage.
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 2 (hand,object)");
-    stage->allowCollisions(kSceneObjectName,
+    stage->allowCollisions(kSceneObjectNameOctomap,
                            task.value()
                                ->getRobotModel()
                                ->getJointModelGroup(kEndEffectorGroupName)
@@ -139,7 +137,7 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
     container->insert(std::move(stage));
   }
 
-  // Generate the Inverse Kinematic (IK) solutions to move to the pose specified in the "grasp_pose" input port.
+  // Generate the Inverse Kinematic (IK) solutions to move to the pose specified in the "place_pose" input port.
   // This will generate up to kMaxIKSolutions IK solution candidates to sample from, unless the timeout specified in
   // kIKTimeoutSeconds is reached first.
   // Collision checking is ignored for IK pose generation. Solutions that result in forbidden collisions will be
@@ -149,8 +147,8 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
     auto stage = std::make_unique<moveit::task_constructor::stages::GeneratePose>("Generate pose");
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT);
     stage->properties().set("marker_ns", "grasp_frame");
-    stage->setPose(grasp_pose.value());
-    stage->setMonitoredStage(task.value()->stages()->findChild("Current state"));  // Hook into current state
+    stage->setPose(place_pose.value());
+    stage->setMonitoredStage(task.value()->stages()->findChild("current state"));  // Hook into current state
 
     // Compute IK
     auto wrapper = std::make_unique<moveit::task_constructor::stages::ComputeIK>("Pose IK", std::move(stage));
@@ -168,14 +166,14 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
   // Lift, and Retreat stages).
   {
     auto stage =
-        std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 3 (hand,object)");
-    stage->allowCollisions(kSceneObjectName,
+        std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Forbid collision (hand,object)");
+    stage->allowCollisions(kSceneObjectNameOctomap,
                            task.value()
                                ->getRobotModel()
                                ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            true);
-    container->insert(std::move(stage));
+    container->add(std::move(stage));
   }
 
   /** Open Hand **/
@@ -192,7 +190,7 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Forbid collision (hand,object)");
-    stage->allowCollisions(kSceneObjectName,
+    stage->allowCollisions(kSceneObjectNameOctomap,
                            task.value()
                                ->getRobotModel()
                                ->getJointModelGroup(kEndEffectorGroupName)
