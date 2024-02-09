@@ -8,7 +8,7 @@
         <Control ID="Sequence" name="Pick">
           <Action ID="InitializeMTCTask" task_id="pick_task" controller_names="/joint_trajectory_controller /robotiq_gripper_controller" task="{mtc_pick_task}"/>
           <Action ID="SetupMTCCurrentState" task="{mtc_pick_task}"/>
-          <Action ID="CreateStampedPose" reference_frame="world" position_xyz="-0.73; 0.06;-0.12" orientation_xyzw="-0.5;-0.5;0.5;0.5" stamped_pose="{pick_pose}"/>
+          <Action ID="CreateStampedPose" reference_frame="world" position_xyz="-0.59; 0.0; 0.03" orientation_xyzw="0.707;-0.707;0.0;0.0" stamped_pose="{pick_pose}"/>
           <Action ID="SetupMtcPickFromPose" grasp_pose="{pick_pose}" task="{mtc_pick_task}"/>
           <Action ID="PlanMTCTask" task="{mtc_pick_task}" solution="{mtc_pick_solution}"/>
           <Action ID="ExecuteMTCTask" solution="{mtc_pick_solution}"/>

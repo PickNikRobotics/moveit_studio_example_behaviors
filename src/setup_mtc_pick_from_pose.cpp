@@ -113,16 +113,16 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
         "Allow collision (object, everything-but-the-robot)");
     // Allow the object to collide with all objects which are not part of the arm or gripper group
     stage->allowCollisions(kSceneObjectName, true);
-    stage->allowCollisions(kSceneObjectName, task.value()
+    stage->allowCollisions(kSceneObjectName,
+                           task.value()
                                ->getRobotModel()
                                ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
-                                                        false);
-    stage->allowCollisions(kSceneObjectName, task.value()
-                               ->getRobotModel()
-                               ->getJointModelGroup(kArmGroupName)
-                               ->getLinkModelNamesWithCollisionGeometry(),
-                                                        false);
+                           false);
+    stage->allowCollisions(
+        kSceneObjectName,
+        task.value()->getRobotModel()->getJointModelGroup(kArmGroupName)->getLinkModelNamesWithCollisionGeometry(),
+        false);
     container->add(std::move(stage));
   }
   /** Open Hand **/
@@ -161,11 +161,12 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
                                ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            true);
-    stage->allowCollisions(kSceneObjectNameOctomap, task.value()
+    stage->allowCollisions(kSceneObjectNameOctomap,
+                           task.value()
                                ->getRobotModel()
                                ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
-                                                        true);
+                           true);
     container->add(std::move(stage));
   }
 
@@ -202,11 +203,12 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
                                ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            false);
-    stage->allowCollisions(kSceneObjectNameOctomap, task.value()
-                           ->getRobotModel()
-                           ->getJointModelGroup(kEndEffectorGroupName)
-                           ->getLinkModelNamesWithCollisionGeometry(),
-                                                    false);
+    stage->allowCollisions(kSceneObjectNameOctomap,
+                           task.value()
+                               ->getRobotModel()
+                               ->getJointModelGroup(kEndEffectorGroupName)
+                               ->getLinkModelNamesWithCollisionGeometry(),
+                           false);
     container->insert(std::move(stage));
   }
 
@@ -221,7 +223,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT);
     stage->properties().set("marker_ns", "grasp_frame");
     stage->setPose(grasp_pose.value());
-    stage->setMonitoredStage(task.value()->stages()->findChild("Open hand"));  // Hook into current state
+    stage->setMonitoredStage(task.value()->stages()->findChild("current state"));  // Hook into current state
 
     // Compute IK
     auto wrapper = std::make_unique<moveit::task_constructor::stages::ComputeIK>("Pose IK", std::move(stage));
@@ -246,11 +248,12 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
                                ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            true);
-    stage->allowCollisions(kSceneObjectNameOctomap, task.value()
+    stage->allowCollisions(kSceneObjectNameOctomap,
+                           task.value()
                                ->getRobotModel()
                                ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
-                                                        true);
+                           true);
     container->insert(std::move(stage));
   }
 
@@ -317,11 +320,12 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
                                ->getJointModelGroup(kEndEffectorGroupName)
                                ->getLinkModelNamesWithCollisionGeometry(),
                            false);
-    stage->allowCollisions(kSceneObjectNameOctomap, task.value()
-                           ->getRobotModel()
-                           ->getJointModelGroup(kEndEffectorGroupName)
-                           ->getLinkModelNamesWithCollisionGeometry(),
-                                                    false);
+    stage->allowCollisions(kSceneObjectNameOctomap,
+                           task.value()
+                               ->getRobotModel()
+                               ->getJointModelGroup(kEndEffectorGroupName)
+                               ->getLinkModelNamesWithCollisionGeometry(),
+                           false);
     container->add(std::move(stage));
   }
 
