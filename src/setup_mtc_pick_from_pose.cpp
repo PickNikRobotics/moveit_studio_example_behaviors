@@ -73,7 +73,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
 
   // Create planners
   const auto mtc_pipeline_planner =
-      std::make_shared<moveit::task_constructor::solvers::PipelinePlanner>(shared_resources_->node);
+      std::make_shared<moveit::task_constructor::solvers::PipelinePlanner>(shared_resources_->node, "ompl", "RRTConnectkConfigDefault");
   const auto mtc_joint_interpolation_planner =
       std::make_shared<moveit::task_constructor::solvers::JointInterpolationPlanner>();
   const auto mtc_cartesian_planner = std::make_shared<moveit::task_constructor::solvers::CartesianPath>();
@@ -96,7 +96,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
         moveit::task_constructor::stages::Connect::GroupPlannerVector{ { kArmGroupName, mtc_pipeline_planner } });
     stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
                                           { kPropertyNameTrajectoryExecutionInfo });
-    stage->setTimeout(10);
+    stage->setTimeout(1.0);
     container->add(std::move(stage));
   }
 
