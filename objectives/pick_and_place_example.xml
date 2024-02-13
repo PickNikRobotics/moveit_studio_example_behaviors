@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<root BTCPP_format="4" main_tree_to_execute="MTC Pick And Place">
+<root BTCPP_format="4" main_tree_to_execute="Pick And Place Example">
   <!-- ////////// -->
-  <BehaviorTree ID="MTC Pick And Place" _description="" _favorite="true" _hardcoded="false">
+  <BehaviorTree ID="Pick And Place Example" _description="Pick and place example objective" _favorite="true" _hardcoded="false">
     <Control ID="Sequence" name="Pick and Place">
       <SubTree ID="Open Gripper"/>
       <Control ID="Sequence" name="Pick">
@@ -15,7 +15,7 @@
       <Control ID="Sequence" name="Place">
         <Action ID="InitializeMTCTask" task_id="place_task" controller_names="/joint_trajectory_controller /robotiq_gripper_controller" task="{mtc_place_task}"/>
         <Action ID="SetupMTCCurrentState" task="{mtc_place_task}"/>
-        <Action ID="CreateStampedPose" reference_frame="world" position_xyz="-0.59; 0.0; 0.03" orientation_xyzw="0.707;-0.707;0.0;0.0" stamped_pose="{place_pose}"/>
+        <Action ID="CreateStampedPose" reference_frame="world" position_xyz="-0.49; 0.1; 0.03" orientation_xyzw="0.707;-0.707;0.0;0.0" stamped_pose="{place_pose}"/>
         <Action ID="SetupMtcPlaceFromPose" place_pose="{place_pose}" task="{mtc_place_task}"/>
         <Action ID="PlanMTCTask" task="{mtc_place_task}" solution="{mtc_place_solution}"/>
         <Action ID="ExecuteMTCTask" solution="{mtc_place_solution}"/>

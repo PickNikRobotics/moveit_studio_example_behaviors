@@ -29,7 +29,6 @@ constexpr auto kEndEffectorName = "moveit_ee";
 constexpr auto kHandFrameName = "grasp_link";
 constexpr auto kHandCloseName = "close";
 constexpr auto kApproachDistance = 0.1;
-constexpr auto kLiftDistance = 0.1;
 constexpr auto kPropertyNameTrajectoryExecutionInfo = "trajectory_execution_info";
 constexpr double kIKTimeoutSeconds = 1.0;
 constexpr int kMaxIKSolutions = 20;
@@ -72,8 +71,8 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
   }
 
   // Create planners
-  const auto mtc_pipeline_planner =
-      std::make_shared<moveit::task_constructor::solvers::PipelinePlanner>(shared_resources_->node, "ompl", "RRTConnectkConfigDefault");
+  const auto mtc_pipeline_planner = std::make_shared<moveit::task_constructor::solvers::PipelinePlanner>(
+      shared_resources_->node, "ompl", "RRTConnectkConfigDefault");
   const auto mtc_joint_interpolation_planner =
       std::make_shared<moveit::task_constructor::solvers::JointInterpolationPlanner>();
   const auto mtc_cartesian_planner = std::make_shared<moveit::task_constructor::solvers::CartesianPath>();
@@ -100,10 +99,10 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     container->add(std::move(stage));
   }
 
-  // Set Allowed Collisions
-  // This stage forbids collisions between the gripper and the octomap before the stage (during the Move To Pre-Grasp
-  // Pose stage, so the gripper doesn't collide with objects while moving into position), and allows them after this
-  // stage.
+  /** Set Allowed Collisions
+      This stage forbids collisions between the gripper and the octomap before the stage (during the Move To Pre-Grasp
+      Pose stage, so the gripper doesn't collide with objects while moving into position), and allows them after this
+      stage. **/
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 1 (hand,object)");
@@ -134,13 +133,13 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     approach_vector_msg.header.frame_id = kHandFrameName;
 
     stage->setDirection(approach_vector_msg);
-    stage->setTimeout(10);
+    stage->setTimeout(1.0);
     container->add(std::move(stage));
   }
 
-  // Set Allowed Collisions
-  // This stage allows collisions between the gripper and the octomap before the stage (during the Approach Grasp
-  // stage, so the gripper can move into the octomap), and forbids them after this stage.
+  /** Set Allowed Collisions
+      This stage allows collisions between the gripper and the octomap before the stage (during the Approach Grasp
+      stage, so the gripper can move into the octomap), and forbids them after this stage. */
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 2 (hand,object)");
@@ -153,11 +152,11 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     container->insert(std::move(stage));
   }
 
-  // Generate the Inverse Kinematic (IK) solutions to move to the pose specified in the "grasp_pose" input port.
-  // This will generate up to kMaxIKSolutions IK solution candidates to sample from, unless the timeout specified in
-  // kIKTimeoutSeconds is reached first.
-  // Collision checking is ignored for IK pose generation. Solutions that result in forbidden collisions will be
-  // eliminated by failures in the stages before and after this one.
+  /** Generate the Inverse Kinematic (IK) solutions to move to the pose specified in the "grasp_pose" input port.
+      This will generate up to kMaxIKSolutions IK solution candidates to sample from, unless the timeout specified in
+      kIKTimeoutSeconds is reached first.
+      Collision checking is ignored for IK pose generation. Solutions that result in forbidden collisions will be
+      eliminated by failures in the stages before and after this one. **/
   {
     // Specify pose to generate for
     auto stage = std::make_unique<moveit::task_constructor::stages::GeneratePose>("Generate pose");
@@ -177,9 +176,9 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     container->add(std::move(wrapper));
   }
 
-  // Allow Collision
-  // This stage allows collisions between the gripper and object for stages after this one (during the Close Hand,
-  // Lift, and Retreat stages).
+  /** Allow Collision
+      This stage allows collisions between the gripper and object for stages after this one (during the Close Hand,
+      Lift, and Retreat stages). **/
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 3 (hand,object)");
@@ -200,22 +199,6 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
                                           { kPropertyNameTrajectoryExecutionInfo });
     stage->setGroup(kEndEffectorGroupName);
     stage->setGoal(kHandCloseName);
-    container->add(std::move(stage));
-  }
-
-  /** Lift Object **/
-  {
-    auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>("Lift", mtc_cartesian_planner);
-    stage->properties().configureInitFrom(moveit::task_constructor::Stage::PARENT,
-                                          { kPropertyNameTrajectoryExecutionInfo });
-    stage->setGroup(kArmGroupName);
-    stage->setIKFrame(kHandFrameName);
-
-    geometry_msgs::msg::Vector3Stamped lift_vector_msg;
-    lift_vector_msg.header.frame_id = kWorldFrame;
-    lift_vector_msg.vector.z = kLiftDistance;
-
-    stage->setDirection(lift_vector_msg);
     container->add(std::move(stage));
   }
 

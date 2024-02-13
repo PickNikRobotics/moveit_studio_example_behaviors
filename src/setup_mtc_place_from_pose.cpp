@@ -30,7 +30,6 @@ constexpr auto kHandFrameName = "grasp_link";
 constexpr auto kHandOpenName = "open";
 constexpr auto kHandCloseName = "close";
 constexpr auto kApproachDistance = 0.1;
-constexpr auto kLiftDistance = 0.05;
 constexpr auto kPropertyNameTrajectoryExecutionInfo = "trajectory_execution_info";
 constexpr double kIKTimeoutSeconds = 1.0;
 constexpr int kMaxIKSolutions = 20;
@@ -91,6 +90,19 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
   container->setProperty("eef", kEndEffectorName);
   container->setProperty("ik_frame", kHandFrameName);
 
+  /** Set Allowed Collisions since the hand holds an collision object */
+  {
+    auto stage =
+        std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 2 (hand,object)");
+    stage->allowCollisions(kSceneObjectNameOctomap,
+                           task.value()
+                               ->getRobotModel()
+                               ->getJointModelGroup(kEndEffectorGroupName)
+                               ->getLinkModelNamesWithCollisionGeometry(),
+                           false);
+    container->insert(std::move(stage));
+  }
+
   /** Move To Pre-Place Pose **/
   {
     auto stage = std::make_unique<moveit::task_constructor::stages::Connect>(
@@ -101,13 +113,13 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
     stage->properties().set(kPropertyNameTrajectoryExecutionInfo,
                             boost::any_cast<moveit::task_constructor::TrajectoryExecutionInfo>(
                                 container->properties().get(kPropertyNameTrajectoryExecutionInfo)));
-    stage->setTimeout(10);
+    stage->setTimeout(1.0);
     container->add(std::move(stage));
   }
 
   const Eigen::Vector3d approach_vector{ 0.0, 0.0, kApproachDistance };
 
-  /** Approach Place **/
+  /** Approach Place Pose **/
   {
     // Send relative move to MTC stage
     auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>("Approach", mtc_cartesian_planner);
@@ -124,24 +136,11 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
     container->add(std::move(stage));
   }
 
-  // Set Allowed Collisions
-  {
-    auto stage =
-        std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 2 (hand,object)");
-    stage->allowCollisions(kSceneObjectNameOctomap,
-                           task.value()
-                               ->getRobotModel()
-                               ->getJointModelGroup(kEndEffectorGroupName)
-                               ->getLinkModelNamesWithCollisionGeometry(),
-                           false);
-    container->insert(std::move(stage));
-  }
-
-  // Generate the Inverse Kinematic (IK) solutions to move to the pose specified in the "place_pose" input port.
-  // This will generate up to kMaxIKSolutions IK solution candidates to sample from, unless the timeout specified in
-  // kIKTimeoutSeconds is reached first.
-  // Collision checking is ignored for IK pose generation. Solutions that result in forbidden collisions will be
-  // eliminated by failures in the stages before and after this one.
+  /** Generate the Inverse Kinematic (IK) solutions to move to the pose specified in the "place_pose" input port.
+      This will generate up to kMaxIKSolutions IK solution candidates to sample from, unless the timeout specified in
+      kIKTimeoutSeconds is reached first.
+      Collision checking is ignored for IK pose generation. Solutions that result in forbidden collisions will be
+      eliminated by failures in the stages before and after this one. **/
   {
     // Specify pose to generate for
     auto stage = std::make_unique<moveit::task_constructor::stages::GeneratePose>("Generate pose");
@@ -161,9 +160,9 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
     container->add(std::move(wrapper));
   }
 
-  // Allow Collision
-  // This stage allows collisions between the gripper and object for stages after this one (during the Close Hand,
-  // Lift, and Retreat stages).
+  /** Allow Collision
+      This stage allows collisions between the gripper and object for stages after this one (during the Close Hand,
+      Lift, and Retreat stages). */
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Forbid collision (hand,object)");
@@ -185,8 +184,8 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
     container->add(std::move(stage));
   }
 
-  // Forbid Collision
-  // This stage forbids collisions between the gripper and the object for subsequent stages.
+  /** Forbid Collision
+      This stage forbids collisions between the gripper and the object for subsequent stages. **/
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Forbid collision (hand,object)");
@@ -203,20 +202,6 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
   {
     auto stage = std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Detach");
     stage->detachObject(kSceneObjectName, kHandFrameName);
-    container->add(std::move(stage));
-  }
-
-  /** Lift Object **/
-  {
-    auto stage = std::make_unique<moveit::task_constructor::stages::MoveRelative>("Lift", mtc_cartesian_planner);
-    stage->setGroup(kArmGroupName);
-    stage->setIKFrame(kHandFrameName);
-
-    geometry_msgs::msg::Vector3Stamped lift_vector_msg;
-    lift_vector_msg.header.frame_id = kWorldFrame;
-    lift_vector_msg.vector.z = kLiftDistance;
-
-    stage->setDirection(lift_vector_msg);
     container->add(std::move(stage));
   }
 
