@@ -197,13 +197,6 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
     container->add(std::move(stage));
   }
 
-  /** Detach Object **/
-  {
-    auto stage = std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Detach");
-    stage->detachObject(kSceneObjectName, kHandFrameName);
-    container->add(std::move(stage));
-  }
-
   /** Retreat **/
   {
     // Send relative move to MTC stage
