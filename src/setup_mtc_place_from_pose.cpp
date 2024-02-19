@@ -34,7 +34,6 @@ constexpr auto kPropertyNameTrajectoryExecutionInfo = "trajectory_execution_info
 constexpr double kIKTimeoutSeconds = 1.0;
 constexpr int kMaxIKSolutions = 20;
 constexpr auto kSceneObjectNameOctomap = "<octomap>";
-constexpr auto kSceneObjectName = "object";
 }  // namespace
 
 namespace example_behaviors
@@ -165,7 +164,7 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
       Lift, and Retreat stages). */
   {
     auto stage =
-        std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Forbid collision (hand,object)");
+        std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision (hand,object)");
     stage->allowCollisions(kSceneObjectNameOctomap,
                            task.value()
                                ->getRobotModel()
