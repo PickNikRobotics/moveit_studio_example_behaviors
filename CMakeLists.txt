@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.16.3)
-project(example_behaviors)
+cmake_minimum_required(VERSION 3.22)
+project(moveit_studio_example_behaviors)
 
 # Set MoveIt's typical CMake settings, including C++ standard version
 find_package(moveit_common REQUIRED)
@@ -25,6 +25,8 @@ add_library(
   src/add_two_ints_service_client.cpp
   src/fibonacci_action_client.cpp
   src/get_string_from_topic.cpp
+  src/setup_mtc_pick_from_pose.cpp
+  src/setup_mtc_place_from_pose.cpp
 )
 target_include_directories(
   example_behaviors
@@ -45,7 +47,7 @@ install(
 
 install(
   DIRECTORY
-  config
+  config objectives
   DESTINATION
   share/${PROJECT_NAME}
 )

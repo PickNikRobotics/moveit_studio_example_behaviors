@@ -1,0 +1,13 @@
+#
+#  This contains information for a unique instance of a robot.
+#
+
+# Name of the package to specialize
+based_on_package: "picknik_ur_gazebo_config"
+
+objectives:
+  # Add new simulation Objectives in addition to the one in the base config package.
+  objective_library_paths:
+    sim:
+      package_name: "moveit_studio_example_behaviors"
+      relative_path: "objectives"

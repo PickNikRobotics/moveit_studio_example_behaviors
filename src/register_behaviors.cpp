@@ -8,6 +8,8 @@
 #include <example_behaviors/add_two_ints_service_client.hpp>
 #include <example_behaviors/fibonacci_action_client.hpp>
 #include <example_behaviors/get_string_from_topic.hpp>
+#include <example_behaviors/setup_mtc_pick_from_pose.hpp>
+#include <example_behaviors/setup_mtc_place_from_pose.hpp>
 
 #include <pluginlib/class_list_macros.hpp>
 
@@ -26,6 +28,9 @@ public:
     moveit_studio::behaviors::registerBehavior<AddTwoIntsServiceClient>(factory, "AddTwoIntsServiceClient",
                                                                         shared_resources);
     moveit_studio::behaviors::registerBehavior<FibonacciActionClient>(factory, "FibonacciActionClient",
+                                                                      shared_resources);
+    moveit_studio::behaviors::registerBehavior<SetupMtcPickFromPose>(factory, "SetupMtcPickFromPose", shared_resources);
+    moveit_studio::behaviors::registerBehavior<SetupMtcPlaceFromPose>(factory, "SetupMtcPlaceFromPose",
                                                                       shared_resources);
   }
 };

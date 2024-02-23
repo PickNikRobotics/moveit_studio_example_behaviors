@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>example_behaviors</name>
+  <name>moveit_studio_example_behaviors</name>
   <version>0.0.0</version>
   <description>A collection of example behaviors for use in MoveIt Pro.</description>
 
