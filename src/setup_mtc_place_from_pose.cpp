@@ -22,7 +22,7 @@ constexpr auto kPortIDTask = "task";
 constexpr auto kPortIDGraspPose = "place_pose";
 
 // Behavior constants
-constexpr auto kWorldFrame = "/world";
+constexpr auto kWorldFrame = "world";
 constexpr auto kArmGroupName = "manipulator";
 constexpr auto kEndEffectorGroupName = "gripper";
 constexpr auto kEndEffectorName = "moveit_ee";
@@ -31,8 +31,8 @@ constexpr auto kHandOpenName = "open";
 constexpr auto kHandCloseName = "close";
 constexpr auto kApproachDistance = 0.1;
 constexpr auto kPropertyNameTrajectoryExecutionInfo = "trajectory_execution_info";
-constexpr double kIKTimeoutSeconds = 1.0;
-constexpr int kMaxIKSolutions = 20;
+constexpr auto kIKTimeoutSeconds = 1.0;
+constexpr auto kMaxIKSolutions = 20;
 constexpr auto kSceneObjectNameOctomap = "<octomap>";
 }  // namespace
 
@@ -89,7 +89,7 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
   container->setProperty("eef", kEndEffectorName);
   container->setProperty("ik_frame", kHandFrameName);
 
-  /** Set Allowed Collisions since the hand holds an collision object */
+  /** Allow Collision since the hand holds a collision object */
   {
     auto stage =
         std::make_unique<moveit::task_constructor::stages::ModifyPlanningScene>("Allow collision 2 (hand,object)");
@@ -135,7 +135,7 @@ BT::NodeStatus SetupMtcPlaceFromPose::tick()
     container->add(std::move(stage));
   }
 
-  /** Generate the Inverse Kinematic (IK) solutions to move to the pose specified in the "place_pose" input port.
+  /** Generate the Inverse Kinematics (IK) solutions to move to the pose specified in the "place_pose" input port.
       This will generate up to kMaxIKSolutions IK solution candidates to sample from, unless the timeout specified in
       kIKTimeoutSeconds is reached first.
       Collision checking is ignored for IK pose generation. Solutions that result in forbidden collisions will be

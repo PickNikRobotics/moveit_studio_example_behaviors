@@ -22,7 +22,7 @@ constexpr auto kPortIDTask = "task";
 constexpr auto kPortIDGraspPose = "grasp_pose";
 
 // Behavior constants
-constexpr auto kWorldFrame = "/world";
+constexpr auto kWorldFrame = "world";
 constexpr auto kArmGroupName = "manipulator";
 constexpr auto kEndEffectorGroupName = "gripper";
 constexpr auto kEndEffectorName = "moveit_ee";
@@ -30,8 +30,8 @@ constexpr auto kHandFrameName = "grasp_link";
 constexpr auto kHandCloseName = "close";
 constexpr auto kApproachDistance = 0.1;
 constexpr auto kPropertyNameTrajectoryExecutionInfo = "trajectory_execution_info";
-constexpr double kIKTimeoutSeconds = 1.0;
-constexpr int kMaxIKSolutions = 20;
+constexpr auto kIKTimeoutSeconds = 1.0;
+constexpr auto kMaxIKSolutions = 20;
 constexpr auto kSceneObjectNameOctomap = "<octomap>";
 }  // namespace
 
@@ -152,7 +152,7 @@ BT::NodeStatus SetupMtcPickFromPose::tick()
     container->insert(std::move(stage));
   }
 
-  /** Generate the Inverse Kinematic (IK) solutions to move to the pose specified in the "grasp_pose" input port.
+  /** Generate the Inverse Kinematics (IK) solutions to move to the pose specified in the "grasp_pose" input port.
       This will generate up to kMaxIKSolutions IK solution candidates to sample from, unless the timeout specified in
       kIKTimeoutSeconds is reached first.
       Collision checking is ignored for IK pose generation. Solutions that result in forbidden collisions will be
