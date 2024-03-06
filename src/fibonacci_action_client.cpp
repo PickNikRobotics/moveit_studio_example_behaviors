@@ -17,7 +17,7 @@ BT::PortsList FibonacciActionClient::providedPorts()
   // This node has two input ports and two output ports
   return BT::PortsList({
       BT::InputPort<std::string>("action_name", "/fibonacci", "The name of the action to send a goal to."),
-      BT::InputPort<std::size_t>("order", 1, "The order of the Fibonacci sequence"),
+      BT::InputPort<std::size_t>("order", "The order of the Fibonacci sequence"),
       BT::OutputPort<std::vector<int>>("feedback", "{feedback}",
                                        "The action feedback containing the latest element in the current Fibonacci "
                                        "sequence."),

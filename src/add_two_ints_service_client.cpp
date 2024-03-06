@@ -16,8 +16,8 @@ BT::PortsList AddTwoIntsServiceClient::providedPorts()
   // This node has three input ports and one output port
   return BT::PortsList({
       BT::InputPort<std::string>("service_name", "/add_two_ints", "The name of the service to call."),
-      BT::InputPort<int>("addend1", 1, "The first int to add to the other."),
-      BT::InputPort<int>("addend2", 1, "The second int to add to the other."),
+      BT::InputPort<int>("addend1", "The first int to add to the other."),
+      BT::InputPort<int>("addend2", "The second int to add to the other."),
       BT::OutputPort<int>("result", "{result}", "Result of the AddTwoInts service."),
   });
 }
