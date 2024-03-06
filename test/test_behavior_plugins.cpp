@@ -31,6 +31,7 @@ TEST(BehaviorTests, test_load_behavior_plugins)
   EXPECT_NO_THROW(
       (void)factory.instantiateTreeNode("test_behavior_name", "GetStringFromTopic", BT::NodeConfiguration()));
   EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "HelloWorld", BT::NodeConfiguration()));
+  EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "PublishColorRGBA", BT::NodeConfiguration()));
   EXPECT_NO_THROW(
       (void)factory.instantiateTreeNode("test_behavior_name", "SetupMTCPickFromPose", BT::NodeConfiguration()));
   EXPECT_NO_THROW(
