@@ -14,13 +14,22 @@ FibonacciActionClient::FibonacciActionClient(
 
 BT::PortsList FibonacciActionClient::providedPorts()
 {
-  // This node has two input ports and two output port
+  // This node has two input ports and two output ports
   return BT::PortsList({
-      BT::InputPort<std::string>("action_name"),
-      BT::InputPort<std::size_t>("order"),
-      BT::OutputPort<std::vector<int>>("feedback"),
-      BT::OutputPort<std::vector<int>>("result"),
+      BT::InputPort<std::string>("action_name", "/fibonacci", "The name of the action to send a goal to."),
+      BT::InputPort<std::size_t>("order", 1, "The order of the Fibonacci sequence"),
+      BT::OutputPort<std::vector<int>>("feedback", "{feedback}",
+                                       "The action feedback containing the latest element in the current Fibonacci "
+                                       "sequence."),
+      BT::OutputPort<std::vector<int>>(
+          "result", "{result}", "The result containing the entire Fibonacci sequence up to the specified order."),
   });
+}
+
+BT::KeyValueVector FibonacciActionClient::metadata()
+{
+  return { { "subcategory", "Example" },
+           { "description", "Calls the Fibonacci action and makes the result available on an output port." } };
 }
 
 tl::expected<std::string, std::string> FibonacciActionClient::getActionName()

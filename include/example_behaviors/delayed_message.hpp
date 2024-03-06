@@ -47,6 +47,13 @@ public:
   static BT::PortsList providedPorts();
 
   /**
+   * @brief Implementation of the metadata() function for displaying metadata, such as Behavior description and
+   * subcategory, in the MoveIt Studio Developer Tool.
+   * @return A BT::KeyValueVector containing the Behavior metadata.
+   */
+  static BT::KeyValueVector metadata();
+
+  /**
    * @brief Implementation of onStart(). Runs when the Behavior is ticked for the first time.
    * @return Always returns BT::NodeStatus::RUNNING, since the success of Behavior's initialization is checked in @ref
    * onRunning().

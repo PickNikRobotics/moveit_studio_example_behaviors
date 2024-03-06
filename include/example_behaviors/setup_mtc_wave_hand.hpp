@@ -53,6 +53,13 @@ public:
    */
   static BT::PortsList providedPorts();
 
+  /**
+   * @brief Implementation of the metadata() function for displaying metadata, such as Behavior description and
+   * subcategory, in the MoveIt Studio Developer Tool.
+   * @return A BT::KeyValueVector containing the Behavior metadata.
+   */
+  static BT::KeyValueVector metadata();
+
 private:
   /**
    * @brief Async thread for SetupMTCWaveHand. Adds MTC stages to an MTC task provided on a data port.

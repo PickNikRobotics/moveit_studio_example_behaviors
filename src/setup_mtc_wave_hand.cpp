@@ -29,8 +29,14 @@ SetupMTCWaveHand::SetupMTCWaveHand(const std::string& name, const BT::NodeConfig
 BT::PortsList SetupMTCWaveHand::providedPorts()
 {
   return {
-    BT::BidirectionalPort<std::shared_ptr<moveit::task_constructor::Task>>(kPortIDTask),
+    BT::BidirectionalPort<std::shared_ptr<moveit::task_constructor::Task>>(kPortIDTask, "{mtc_task}",
+                                                                           "MoveIt Task Constructor task."),
   };
+}
+
+BT::KeyValueVector SetupMTCWaveHand::metadata()
+{
+  return { { "subcategory", "Example" }, { "description", "Wave hello with the end effector." } };
 }
 
 tl::expected<bool, std::string> SetupMTCWaveHand::doWork()

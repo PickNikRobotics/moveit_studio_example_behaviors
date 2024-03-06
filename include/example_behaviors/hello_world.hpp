@@ -39,6 +39,13 @@ public:
   static BT::PortsList providedPorts();
 
   /**
+   * @brief Implementation of the metadata() function for displaying metadata, such as Behavior description and
+   * subcategory, in the MoveIt Studio Developer Tool.
+   * @return A BT::KeyValueVector containing the Behavior metadata.
+   */
+  static BT::KeyValueVector metadata();
+
+  /**
    * @brief Implementation of BT::SyncActionNode::tick() for HelloWorld.
    * @details This function is where the Behavior performs its work when the behavior tree is being run.
    * Since HelloWorld is derived from BT::SyncActionNode, it is very important that its tick() function always finishes

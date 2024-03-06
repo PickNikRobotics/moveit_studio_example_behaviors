@@ -14,6 +14,11 @@ BT::PortsList HelloWorld::providedPorts()
   return BT::PortsList({});
 }
 
+BT::KeyValueVector HelloWorld::metadata()
+{
+  return { { "subcategory", "Example" }, { "description", "Log a message that says \"Hello, world!\"." } };
+}
+
 BT::NodeStatus HelloWorld::tick()
 {
   // Do HelloWorld's useful work.
