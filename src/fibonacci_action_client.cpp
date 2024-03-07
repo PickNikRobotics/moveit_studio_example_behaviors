@@ -29,7 +29,8 @@ BT::PortsList FibonacciActionClient::providedPorts()
 BT::KeyValueVector FibonacciActionClient::metadata()
 {
   return { { "subcategory", "Example" },
-           { "description", "Calls the Fibonacci action and makes the result available on an output port." } };
+           { "description",
+             "Calls an action to get a Fibonacci sequence and makes the result available on an output port." } };
 }
 
 tl::expected<std::string, std::string> FibonacciActionClient::getActionName()
