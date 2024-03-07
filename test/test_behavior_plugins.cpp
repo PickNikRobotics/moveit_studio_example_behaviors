@@ -33,9 +33,9 @@ TEST(BehaviorTests, test_load_behavior_plugins)
   EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "HelloWorld", BT::NodeConfiguration()));
   EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "PublishColorRGBA", BT::NodeConfiguration()));
   EXPECT_NO_THROW(
-      (void)factory.instantiateTreeNode("test_behavior_name", "SetupMTCPickFromPose", BT::NodeConfiguration()));
+      (void)factory.instantiateTreeNode("test_behavior_name", "SetupMtcPickFromPose", BT::NodeConfiguration()));
   EXPECT_NO_THROW(
-      (void)factory.instantiateTreeNode("test_behavior_name", "SetupMTCPlaceFromPose", BT::NodeConfiguration()));
+      (void)factory.instantiateTreeNode("test_behavior_name", "SetupMtcPlaceFromPose", BT::NodeConfiguration()));
   EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "SetupMTCWaveHand", BT::NodeConfiguration()));
 }
 
