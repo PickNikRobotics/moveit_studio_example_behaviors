@@ -16,14 +16,14 @@ BT::PortsList GetStringFromTopic::providedPorts()
   // This node has one input port and one output port
   return BT::PortsList({
       BT::InputPort<std::string>("topic_name", "/chatter", "The name of the topic the Behavior subscribes to."),
-      BT::OutputPort<std::vector<int>>("message_out", "{my_string}", "The output String message."),
+      BT::OutputPort<std::vector<int>>("message_out", "{my_string}", "The output <code>String</code> message."),
   });
 }
 
 BT::KeyValueVector GetStringFromTopic::metadata()
 {
   return { { "subcategory", "Example" },
-           { "description", "Captures a String and makes it available on an output port." } };
+           { "description", "Captures a string message and makes it available on an output port." } };
 }
 
 }  // namespace example_behaviors
