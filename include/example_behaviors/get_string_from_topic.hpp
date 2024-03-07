@@ -14,6 +14,16 @@ public:
   GetStringFromTopic(const std::string& name, const BT::NodeConfiguration& config,
                      const std::shared_ptr<BehaviorContext>& shared_resources);
 
+  /** @brief Implementation of the required providedPorts() function for the hello_world Behavior. */
+  static BT::PortsList providedPorts();
+
+  /**
+   * @brief Implementation of the metadata() function for displaying metadata, such as Behavior description and
+   * subcategory, in the MoveIt Studio Developer Tool.
+   * @return A BT::KeyValueVector containing the Behavior metadata.
+   */
+  static BT::KeyValueVector metadata();
+
 private:
   /** @brief Classes derived from AsyncBehaviorBase must implement getFuture() so that it returns a shared_future class member */
   std::shared_future<tl::expected<bool, std::string>>& getFuture() override

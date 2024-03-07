@@ -25,6 +25,8 @@ public:
 
   static BT::PortsList providedPorts();
 
+  static BT::KeyValueVector metadata();
+
   BT::NodeStatus tick() override;
 };
 }  // namespace example_behaviors

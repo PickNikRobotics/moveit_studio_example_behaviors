@@ -47,9 +47,16 @@ SetupMtcPickFromPose::SetupMtcPickFromPose(
 BT::PortsList SetupMtcPickFromPose::providedPorts()
 {
   return {
-    BT::BidirectionalPort<moveit::task_constructor::TaskPtr>(kPortIDTask),
-    BT::InputPort<geometry_msgs::msg::PoseStamped>(kPortIDGraspPose),
+    BT::BidirectionalPort<moveit::task_constructor::TaskPtr>(kPortIDTask, "{mtc_task}", "MoveIt Task Constructor task."),
+    BT::InputPort<geometry_msgs::msg::PoseStamped>(kPortIDGraspPose, "{pick_pose}",
+                                                   "The stamped pose message used in this MTC stage."),
   };
+}
+
+BT::KeyValueVector SetupMtcPickFromPose::metadata()
+{
+  return { { "subcategory", "Example" },
+           { "description", "Adds the stages to describe a pick motion to the MTC task." } };
 }
 
 BT::NodeStatus SetupMtcPickFromPose::tick()

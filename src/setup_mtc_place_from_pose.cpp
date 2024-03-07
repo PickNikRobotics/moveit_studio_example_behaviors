@@ -48,9 +48,16 @@ SetupMtcPlaceFromPose::SetupMtcPlaceFromPose(
 BT::PortsList SetupMtcPlaceFromPose::providedPorts()
 {
   return {
-    BT::BidirectionalPort<moveit::task_constructor::TaskPtr>(kPortIDTask),
-    BT::InputPort<geometry_msgs::msg::PoseStamped>(kPortIDGraspPose),
+    BT::BidirectionalPort<moveit::task_constructor::TaskPtr>(kPortIDTask, "{mtc_task}", "MoveIt Task Constructor task."),
+    BT::InputPort<geometry_msgs::msg::PoseStamped>(kPortIDGraspPose, "{place_pose}",
+                                                   "The stamped pose message used in this MTC stage."),
   };
+}
+
+BT::KeyValueVector SetupMtcPlaceFromPose::metadata()
+{
+  return { { "subcategory", "Example" },
+           { "description", "Adds the stages to describe a place motion to the MTC task." } };
 }
 
 BT::NodeStatus SetupMtcPlaceFromPose::tick()

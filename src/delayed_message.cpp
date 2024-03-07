@@ -11,7 +11,14 @@ DelayedMessage::DelayedMessage(const std::string& name, const BT::NodeConfigurat
 BT::PortsList DelayedMessage::providedPorts()
 {
   // delay_duration: Number of seconds to wait before logging a message
-  return BT::PortsList({ BT::InputPort<double>("delay_duration") });
+  return BT::PortsList(
+      { BT::InputPort<double>("delay_duration", "5", "The duration, in seconds, to wait before logging a message.") });
+}
+
+BT::KeyValueVector DelayedMessage::metadata()
+{
+  return { { "subcategory", "Example" },
+           { "description", "After some time, log a message that says \"Hello, world!\"." } };
 }
 
 BT::NodeStatus DelayedMessage::onStart()

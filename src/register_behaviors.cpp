@@ -8,6 +8,7 @@
 #include <example_behaviors/add_two_ints_service_client.hpp>
 #include <example_behaviors/fibonacci_action_client.hpp>
 #include <example_behaviors/get_string_from_topic.hpp>
+#include <example_behaviors/publish_color_rgba.hpp>
 #include <example_behaviors/setup_mtc_pick_from_pose.hpp>
 #include <example_behaviors/setup_mtc_place_from_pose.hpp>
 
@@ -29,6 +30,7 @@ public:
                                                                         shared_resources);
     moveit_studio::behaviors::registerBehavior<FibonacciActionClient>(factory, "FibonacciActionClient",
                                                                       shared_resources);
+    moveit_studio::behaviors::registerBehavior<PublishColorRGBA>(factory, "PublishColorRGBA", shared_resources);
     moveit_studio::behaviors::registerBehavior<SetupMtcPickFromPose>(factory, "SetupMtcPickFromPose", shared_resources);
     moveit_studio::behaviors::registerBehavior<SetupMtcPlaceFromPose>(factory, "SetupMtcPlaceFromPose",
                                                                       shared_resources);

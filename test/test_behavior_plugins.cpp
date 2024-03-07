@@ -22,14 +22,21 @@ TEST(BehaviorTests, test_load_behavior_plugins)
     auto plugin_instance = class_loader.createUniqueInstance("example_behaviors::ExampleBehaviorsLoader");
     ASSERT_NO_THROW(plugin_instance->registerBehaviors(factory, shared_resources));
   }
-  // Test that ClassLoader is able to find and instantiate each behavior using the package's plugin description info.
-  factory.instantiateTreeNode("test_behavior_name", "SetupMTCWaveHand", BT::NodeConfiguration());
-
-  // Test that ClassLoader is able to find and instantiate each behavior using the package's plugin description info.
-  factory.instantiateTreeNode("test_behavior_name", "DelayedMessage", BT::NodeConfiguration());
-
-  // Test that ClassLoader is able to find and instantiate each behavior using the package's plugin description info.
-  factory.instantiateTreeNode("test_behavior_name", "HelloWorld", BT::NodeConfiguration());
+  // Test that ClassLoader is able to find and instantiate each Behavior using the package's plugin description info.
+  EXPECT_NO_THROW(
+      (void)factory.instantiateTreeNode("test_behavior_name", "AddTwoIntsServiceClient", BT::NodeConfiguration()));
+  EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "DelayedMessage", BT::NodeConfiguration()));
+  EXPECT_NO_THROW(
+      (void)factory.instantiateTreeNode("test_behavior_name", "FibonacciActionClient", BT::NodeConfiguration()));
+  EXPECT_NO_THROW(
+      (void)factory.instantiateTreeNode("test_behavior_name", "GetStringFromTopic", BT::NodeConfiguration()));
+  EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "HelloWorld", BT::NodeConfiguration()));
+  EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "PublishColorRGBA", BT::NodeConfiguration()));
+  EXPECT_NO_THROW(
+      (void)factory.instantiateTreeNode("test_behavior_name", "SetupMtcPickFromPose", BT::NodeConfiguration()));
+  EXPECT_NO_THROW(
+      (void)factory.instantiateTreeNode("test_behavior_name", "SetupMtcPlaceFromPose", BT::NodeConfiguration()));
+  EXPECT_NO_THROW((void)factory.instantiateTreeNode("test_behavior_name", "SetupMTCWaveHand", BT::NodeConfiguration()));
 }
 
 int main(int argc, char** argv)
