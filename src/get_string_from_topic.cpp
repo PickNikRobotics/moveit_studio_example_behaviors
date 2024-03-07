@@ -16,7 +16,7 @@ BT::PortsList GetStringFromTopic::providedPorts()
   // This node has one input port and one output port
   return BT::PortsList({
       BT::InputPort<std::string>("topic_name", "/chatter", "The name of the topic the Behavior subscribes to."),
-      BT::OutputPort<std::vector<int>>("message_out", "{my_string}", "The output <code>String</code> message."),
+      BT::OutputPort<std::vector<int>>("message_out", "{my_string}", "The output String message."),
   });
 }
 
