@@ -7,7 +7,7 @@
 #include <moveit_msgs/msg/collision_object.hpp>
 #include <moveit_studio_behavior_interface/behavior_context.hpp>
 #include <moveit_studio_behavior_interface/check_for_error.hpp>
-#include <moveit_studio_behavior_interface/yaml_parsing_tools.hpp>
+#include <moveit_studio_common/utils/yaml_parsing_tools.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
 #include <tf2_eigen/tf2_eigen.hpp>
 #include <yaml-cpp/yaml.h>
